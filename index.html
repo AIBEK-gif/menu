@@ -141,7 +141,8 @@
 <body>
 
 <div class="menu-container">
-    <h2> Le Papa Martin </h2>
+    <h2>🍔 Le Papa Martin 🌯</h2>
+    
     <div id="menu-items"></div>
 
     <div class="form-section">
@@ -189,6 +190,7 @@
 
     function renderMenu() {
         const container = document.getElementById('menu-items');
+        if (!container) return;
         container.innerHTML = '';
         Object.keys(menu).forEach(id => {
             const item = menu[id];
