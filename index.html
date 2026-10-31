@@ -32,7 +32,7 @@
         }
         .menu-item {
             background: #2a2a2a;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
             border-radius: 16px;
             overflow: hidden;
             box-shadow: 0 4px 10px rgba(0,0,0,0.3);
@@ -54,7 +54,7 @@
         }
         .item-title {
             font-weight: bold;
-            font-size: 20px;
+            font-size: 19px;
             color: #fff;
             margin: 0;
         }
@@ -66,37 +66,102 @@
         }
         .item-price {
             color: #ffb74d;
-            font-size: 19px;
+            font-size: 18px;
             font-weight: 700;
         }
-        .btn-order {
-            background: #00e676;
+        .controls {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+        .btn-qty {
+            background: #ff9800;
             color: #000;
-            text-decoration: none;
-            padding: 12px 20px;
-            font-size: 16px;
-            font-weight: bold;
+            border: none;
+            width: 36px;
+            height: 36px;
             border-radius: 10px;
+            font-size: 22px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .qty {
+            font-size: 18px;
+            font-weight: bold;
+            min-width: 24px;
             text-align: center;
-            box-shadow: 0 4px 10px rgba(0,230,118,0.2);
+            color: #fff;
+        }
+        .form-section {
+            margin: 25px 0 15px 0;
+            border-top: 1px dashed #444;
+            padding-top: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 14px;
+            color: #b3b3b3;
+        }
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 12px;
+            background: #2a2a2a;
+            color: #fff;
+            border: 1px solid #444;
+            border-radius: 10px;
+            font-size: 15px;
+            box-sizing: border-box;
         }
         .info-box {
             background: #2a2a2a;
             padding: 14px;
             border-radius: 10px;
             border-left: 4px solid #ff9800;
-            margin-top: 20px;
+            margin-bottom: 20px;
             font-size: 13px;
             color: #ccc;
+            line-height: 1.4;
         }
         .account-num {
             background: #121212;
             padding: 4px 8px;
             display: inline-block;
             border-radius: 4px;
+            margin-bottom: 8px;
             color: #ff9800;
+            font-family: monospace;
             font-weight: bold;
-            margin-bottom: 5px;
+        }
+        .total-box {
+            text-align: right;
+            font-size: 21px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #ffb74d;
+            border-bottom: 1px solid #444;
+            padding-bottom: 12px;
+        }
+        .btn-whatsapp {
+            background: #00e676;
+            color: #000;
+            border: none;
+            width: 100%;
+            padding: 16px;
+            font-size: 17px;
+            font-weight: bold;
+            border-radius: 12px;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            display: block;
+            box-sizing: border-box;
         }
     </style>
 </head>
@@ -106,52 +171,87 @@
     <h2>🍔 Le Papa Martin 🌯</h2>
     
     <div id="menu-items">
-        <!-- Блюдо 1 -->
+        <!-- Карточка 1: Кебаб -->
         <div class="menu-item">
-            <img class="item-img" src="https://unsplash.com">
+            <img class="item-img" src="https://googleusercontent.com">
             <div class="item-details">
                 <div class="item-title">Искандер Кебаб</div>
                 <div class="item-row">
                     <div class="item-price">440 сом</div>
-                    <a class="btn-order" href="whatsapp://send?phone=996773881764&text=%2A%D0%97%D0%B0%D0%BA%D0%B0%D0%B7%20%D0%B2%20Le%20Papa%20Martin%2A%0A%0A%D0%AF%20%D1%85%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%20%D0%98%D1%81%D0%BA%D0%B0%D0%BD%D0%B4%D0%B5%D1%80%20%D0%9A%D0%B5%D0%B1%D0%B0%D0%B1%20%28440%20%D1%81%D0%BE%D0%BC%29.%20%D0%9F%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BF%D0%BE%D0%B4%D1%82%D0%B2%D0%B5%D1%80%D0%B4%D0%B8%D1%82%D0%B5%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%20%D0%B8%20%D0%B2%D1%8B%D1%88%D0%BB%D0%B8%D1%82%D0%B5%20%D1%80%D0%B5%D0%BA%D0%B2%D0%B8%D0%B7%D0%B8%D1%82%D1%8B.">Заказать ➜</a>
+                    <div class="controls">
+                        <button class="btn-qty" onclick="modifyItem('kebab',-1)">-</button>
+                        <span class="qty" id="qty-kebab">0</span>
+                        <button class="btn-qty" onclick="modifyItem('kebab',1)">+</button>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- Блюдо 2 -->
+        <!-- Карточка 2: Бургер -->
         <div class="menu-item">
-            <img class="item-img" src="https://unsplash.com">
+            <img class="item-img" src="https://googleusercontent.com">
             <div class="item-details">
                 <div class="item-title">Фирменный РD</div>
                 <div class="item-row">
                     <div class="item-price">350 сом</div>
-                    <a class="btn-order" href="whatsapp://send?phone=996773881764&text=%2A%D0%97%D0%B0%D0%BA%D0%B0%D0%B7%20%D0%B2%20Le%20Papa%20Martin%2A%0A%0A%D0%AF%20%D1%85%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%20%D0%A4%D0%B8%D1%80%D0%BC%D0%B5%D0%BD%D0%BD%D1%8B%D0%B9%20%D0%A0D%20%28350%20%D1%81%D0%BE%D0%BC%29.%20%D0%9F%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BF%D0%BE%D0%B4%D1%82%D0%B2%D0%B5%D1%80%D0%B4%D0%B8%D1%82%D0%B5%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%20%D0%B8%20%D0%B2%D1%8B%D1%88%D0%BB%D0%B8%D0%BF%D1%82%D0%B5%20%D1%80%D0%B5%D0%BA%D0%B2%D0%B8%D0%B7%D0%B8%D1%82%D1%8B.">Заказать ➜</a>
+                    <div class="controls">
+                        <button class="btn-qty" onclick="modifyItem('burger',-1)">-</button>
+                        <span class="qty" id="qty-burger">0</span>
+                        <button class="btn-qty" onclick="modifyItem('burger',1)">+</button>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- Блюдо 3 -->
+        <!-- Карточка 3: Шаурма -->
         <div class="menu-item">
-            <img class="item-img" src="https://unsplash.com">
+            <img class="item-img" src="https://googleusercontent.com">
             <div class="item-details">
                 <div class="item-title">Шаурма по-турецки</div>
                 <div class="item-row">
                     <div class="item-price">350 сом</div>
-                    <a class="btn-order" href="whatsapp://send?phone=996773881764&text=%2A%D0%97%D0%B0%D0%BA%D0%B0%D0%B7%20%D0%B2%20Le%20Papa%20Martin%2A%0A%0A%D0%AF%20%D1%85%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%20%D0%A9%D0%B0%D1%83%D1%80%D0%BC%D0%B0%20%D0%BF%D0%BE-%D1%82%D1%83%D1%80%D0%B5%D1%86%D0%BA%D0%B8%20%28350%20%D1%81%D0%BE%D0%BC%29.%20%D0%9F%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BF%D0%BE%D0%B4%D1%82%D0%B2%D0%B5%D1%80%D0%B4%D0%B8%D1%82%D0%B5%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%20%D0%B8%20%D0%B2%D1%8B%D1%88%D0%BB%D0%B8%D0%BF%D1%82%D0%B5%20%D1%80%D0%B5%D0%BA%D0%B2%D0%B8%D0%B7%D0%B8%D1%82%D1%8B.">Заказать ➜</a>
+                    <div class="controls">
+                        <button class="btn-qty" onclick="modifyItem('shawa',-1)">-</button>
+                        <span class="qty" id="qty-shawa">0</span>
+                        <button class="btn-qty" onclick="modifyItem('shawa',1)">+</button>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- Блюдо 4 -->
+        <!-- Карточка 4: Донер -->
         <div class="menu-item">
-            <img class="item-img" src="https://unsplash.com">
+            <img class="item-img" src="https://googleusercontent.com">
             <div class="item-details">
                 <div class="item-title">Настоящий Донер</div>
                 <div class="item-row">
                     <div class="item-price">350 сом</div>
-                    <a class="btn-order" href="whatsapp://send?phone=996773881764&text=%2A%D0%97%D0%B0%D0%BA%D0%B0%D0%B7%20%D0%B2%20Le%20Papa%20Martin%2A%0A%0A%D0%AF%20%D1%85%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%20%D0%9D%D0%B0%D1%81%D1%82%D0%BE%D1%8F%D1%89%D0%B8%D0%B9%20%D0%94%D0%BE%D0%BD%D0%B5%D1%80%20%28350%20%D1%81%D0%BE%D0%BC%29.%20%D0%9F%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BF%D0%BE%D0%B4%D1%82%D0%B2%D0%B5%D1%80%D0%B4%D0%B8%D1%82%D0%B5%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%20%D0%B8%20%D0%B2%D1%8B%D1%88%D0%BB%D0%B8%D0%BF%D1%82%D0%B5%20%D1%80%D0%B5%D0%BA%D0%B2%D0%B8%D0%B7%D0%B8%D1%82%D1%8B.">Заказать ➜</a>
+                    <div class="controls">
+                        <button class="btn-qty" onclick="modifyItem('doner',-1)">-</button>
+                        <span class="qty" id="qty-doner">0</span>
+                        <button class="btn-qty" onclick="modifyItem('doner',1)">+</button>
+                    </div>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <!-- Раздел ввода данных клиента -->
+    <div class="form-section">
+        <div class="form-group">
+            <label>Ваше имя:</label>
+            <input type="text" id="client-name" placeholder="Введите имя">
+        </div>
+        <div class="form-group">
+            <label>Способ получения:</label>
+            <select id="delivery-type" onchange="runCalc()">
+                <option value="pickup">Самовывоз (Бесплатно)</option>
+                <option value="delivery">Доставка (150 сом / От 1500 бесплатно)</option>
+            </select>
+        </div>
+        <div class="form-group" id="address-block" style="display: none;">
+            <label>Адрес доставки:</label>
+            <input type="text" id="client-address" placeholder="Улица, дом, квартира">
         </div>
     </div>
 
@@ -162,7 +262,35 @@
             <p style="margin:0;">Кошелек администратора: +996 773 881 764 (MBank, О!Деньги)</p>
         </div>
     </div>
+
+    <div class="total-box">
+        Итого к оплате: <span id="total-price">0</span> сом
+    </div>
+
+    <a id="whatsapp-link" class="btn-whatsapp" href="#" onclick="sendOrder(event)">Оформить и отправить в WhatsApp</a>
 </div>
 
-</body>
-</html>
+<script>
+    const adminPhone = "996773881764";
+    const basket = { kebab: 0, burger: 0, shawa: 0, doner: 0 };
+    const cost = { kebab: 440, burger: 350, shawa: 350, doner: 350 };
+    const title = { kebab: "Искандер Кебаб", burger: "Фирменный РD", shawa: "Шаурма по-турецки", doner: "Настоящий Донер" };
+
+    function modifyItem(id, change) {
+        basket[id] += change;
+        if (basket[id] < 0) basket[id] = 0;
+        document.getElementById("qty-" + id).innerText = basket[id];
+        runCalc();
+    }
+
+    function runCalc() {
+        let totalItems = 0;
+        Object.keys(basket).forEach(id => { totalItems += basket[id] * cost[id]; });
+        
+        const type = document.getElementById("delivery-type").value;
+        document.getElementById("address-block").style.display = (type === "delivery") ? "block" : "none";
+        
+        let fee = 0;
+        if (type === "delivery" && totalItems > 0) {
+            fee = (totalItems >= 1500) ? 0 : 150;
+        }
