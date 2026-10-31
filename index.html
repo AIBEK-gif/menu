@@ -249,7 +249,8 @@
         message += "Пожалуйста, подтвердите заказ и вышлите реквизиты.";
 
         const encodedMessage = encodeURIComponent(message);
-        const whatsappUrl = "https://wa.me" + adminPhoneNumber + "?text=" + encodedMessage;
+        const whatsappUrl = "whatsapp://send?phone=" + adminPhoneNumber + "&text=" + encodedMessage;
+;
         
         // Меняем ссылку ссылки прямо перед переходом — бронебойный метод для Safari на iPhone
         const linkElement = document.getElementById('whatsapp-link');
