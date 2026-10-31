@@ -1,8 +1,7 @@
 <!DOCTYPE html>
-<html class="notranslate" translate="no">
+<html>
 <head>
     <meta charset="UTF-8">
-    <meta name="google" content="notranslate">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Le Papa Martin</title>
     <style>
@@ -11,7 +10,7 @@
             background-color: #121212;
             color: #fff;
             margin: 0;
-            padding: 10px;
+            padding: 15px;
             display: flex;
             justify-content: center;
         }
@@ -19,90 +18,66 @@
             max-width: 450px;
             width: 100%;
             background: #1e1e1e;
-            padding: 15px;
-            border-radius: 20px;
-            box-shadow: 0 4px 25px rgba(0,0,0,0.7);
+            padding: 20px;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.6);
             box-sizing: border-box;
         }
         h2 {
             text-align: center;
             color: #ff9800;
-            margin-top: 5px;
-            margin-bottom: 20px;
-            font-size: 26px;
+            margin-top: 0;
         }
         .menu-item {
             background: #2a2a2a;
-            margin-bottom: 20px;
-            border-radius: 16px;
-            overflow: hidden;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-            display: flex;
-            flex-direction: column;
-        }
-        .item-img {
-            width: 100%;
-            height: 220px;
-            object-fit: cover;
-            background-color: #3b3b3b;
-            border-bottom: 2px solid #ff9800;
-        }
-        .item-details {
+            margin-bottom: 15px;
+            border-radius: 12px;
             padding: 15px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
         }
         .item-title {
             font-weight: bold;
-            font-size: 19px;
-            color: #fff;
-            margin: 0;
+            font-size: 18px;
+            margin-bottom: 10px;
         }
         .item-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-top: 5px;
         }
         .item-price {
             color: #ffb74d;
-            font-size: 18px;
-            font-weight: 700;
+            font-size: 16px;
+            font-weight: bold;
         }
         .controls {
             display: flex;
             align-items: center;
-            gap: 14px;
+            gap: 12px;
         }
         .btn-qty {
             background: #ff9800;
             color: #000;
             border: none;
-            width: 36px;
-            height: 36px;
-            border-radius: 10px;
-            font-size: 22px;
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            font-size: 20px;
             font-weight: bold;
             cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
         .qty {
-            font-size: 18px;
+            font-size: 16px;
             font-weight: bold;
-            min-width: 24px;
+            min-width: 20px;
             text-align: center;
-            color: #fff;
         }
         .form-section {
-            margin: 25px 0 15px 0;
+            margin: 20px 0;
             border-top: 1px dashed #444;
-            padding-top: 20px;
+            padding-top: 15px;
         }
         .form-group {
-            margin-bottom: 15px;
+            margin-bottom: 12px;
         }
         .form-group label {
             display: block;
@@ -112,52 +87,46 @@
         }
         .form-group input, .form-group select {
             width: 100%;
-            padding: 12px;
+            padding: 10px;
             background: #2a2a2a;
             color: #fff;
             border: 1px solid #444;
-            border-radius: 10px;
+            border-radius: 8px;
             font-size: 15px;
             box-sizing: border-box;
         }
         .info-box {
             background: #2a2a2a;
-            padding: 14px;
-            border-radius: 10px;
+            padding: 12px;
+            border-radius: 8px;
             border-left: 4px solid #ff9800;
             margin-bottom: 20px;
             font-size: 13px;
-            color: #ccc;
-            line-height: 1.4;
         }
         .account-num {
             background: #121212;
             padding: 4px 8px;
             display: inline-block;
             border-radius: 4px;
-            margin-bottom: 8px;
+            margin-bottom: 5px;
             color: #ff9800;
-            font-family: monospace;
-            font-weight: bold;
         }
         .total-box {
             text-align: right;
-            font-size: 21px;
+            font-size: 19px;
             font-weight: bold;
             margin-bottom: 20px;
             color: #ffb74d;
-            border-bottom: 1px solid #444;
-            padding-bottom: 12px;
         }
         .btn-whatsapp {
             background: #00e676;
             color: #000;
             border: none;
             width: 100%;
-            padding: 16px;
-            font-size: 17px;
+            padding: 15px;
+            font-size: 16px;
             font-weight: bold;
-            border-radius: 12px;
+            border-radius: 10px;
             cursor: pointer;
             text-align: center;
             text-decoration: none;
@@ -172,66 +141,50 @@
     <h2>Le Papa Martin</h2>
     
     <div id="menu-items">
-        <!-- Блюдо 1 -->
         <div class="menu-item">
-            <img class="item-img" src="https://unsplash.com">
-            <div class="item-details">
-                <div class="item-title">Искандер Кебаб</div>
-                <div class="item-row">
-                    <div class="item-price">440 сом</div>
-                    <div class="controls">
-                        <button class="btn-qty" onclick="modifyItem('kebab',-1)">-</button>
-                        <span class="qty" id="qty-kebab">0</span>
-                        <button class="btn-qty" onclick="modifyItem('kebab',1)">+</button>
-                    </div>
+            <div class="item-title">Искандер Кебаб</div>
+            <div class="item-row">
+                <div class="item-price">440 сом</div>
+                <div class="controls">
+                    <button class="btn-qty" onclick="changeCount('kebab',-1)">-</button>
+                    <span class="qty" id="qty-kebab">0</span>
+                    <button class="btn-qty" onclick="changeCount('kebab',1)">+</button>
                 </div>
             </div>
         </div>
 
-        <!-- Блюдо 2 -->
         <div class="menu-item">
-            <img class="item-img" src="https://unsplash.com">
-            <div class="item-details">
-                <div class="item-title">Фирменный РD</div>
-                <div class="item-row">
-                    <div class="item-price">350 сом</div>
-                    <div class="controls">
-                        <button class="btn-qty" onclick="modifyItem('burger',-1)">-</button>
-                        <span class="qty" id="qty-burger">0</span>
-                        <button class="btn-qty" onclick="modifyItem('burger',1)">+</button>
-                    </div>
+            <div class="item-title">Фирменный РD</div>
+            <div class="item-row">
+                <div class="item-price">350 сом</div>
+                <div class="controls">
+                    <button class="btn-qty" onclick="changeCount('burger',-1)">-</button>
+                    <span class="qty" id="qty-burger">0</span>
+                    <button class="btn-qty" onclick="changeCount('burger',1)">+</button>
                 </div>
             </div>
         </div>
 
-        <!-- Блюдо 3 -->
         <div class="menu-item">
-            <img class="item-img" src="https://unsplash.com">
-            <div class="item-details">
-                <div class="item-title">Шаурма по-турецки</div>
-                <div class="item-row">
-                    <div class="item-price">350 сом</div>
-                    <div class="controls">
-                        <button class="btn-qty" onclick="modifyItem('shawa',-1)">-</button>
-                        <span class="qty" id="qty-shawa">0</span>
-                        <button class="btn-qty" onclick="modifyItem('shawa',1)">+</button>
-                    </div>
+            <div class="item-title">Шаурма по-турецки</div>
+            <div class="item-row">
+                <div class="item-price">350 сом</div>
+                <div class="controls">
+                    <button class="btn-qty" onclick="changeCount('shawa',-1)">-</button>
+                    <span class="qty" id="qty-shawa">0</span>
+                    <button class="btn-qty" onclick="changeCount('shawa',1)">+</button>
                 </div>
             </div>
         </div>
 
-        <!-- Блюдо 4 -->
         <div class="menu-item">
-            <img class="item-img" src="https://unsplash.com">
-            <div class="item-details">
-                <div class="item-title">Настоящий Донер</div>
-                <div class="item-row">
-                    <div class="item-price">350 сом</div>
-                    <div class="controls">
-                        <button class="btn-qty" onclick="modifyItem('doner',-1)">-</button>
-                        <span class="qty" id="qty-doner">0</span>
-                        <button class="btn-qty" onclick="modifyItem('doner',1)">+</button>
-                    </div>
+            <div class="item-title">Настоящий Донер</div>
+            <div class="item-row">
+                <div class="item-price">350 сом</div>
+                <div class="controls">
+                    <button class="btn-qty" onclick="changeCount('doner',-1)">-</button>
+                    <span class="qty" id="qty-doner">0</span>
+                    <button class="btn-qty" onclick="changeCount('doner',1)">+</button>
                 </div>
             </div>
         </div>
@@ -244,7 +197,7 @@
         </div>
         <div class="form-group">
             <label>Способ получения:</label>
-            <select id="delivery-type" onchange="runCalc()">
+            <select id="delivery-type" onchange="updateDelivery()">
                 <option value="pickup">Самовывоз (Бесплатно)</option>
                 <option value="delivery">Доставка (150 сом / От 1500 бесплатно)</option>
             </select>
@@ -271,28 +224,75 @@
 </div>
 
 <script>
-    const adminPhone = "996773881764";
-    const basket = { kebab: 0, burger: 0, shawa: 0, doner: 0 };
-    const cost = { kebab: 440, burger: 350, shawa: 350, doner: 350 };
-    const title = { kebab: "Искандер Кебаб", burger: "Фирменный РD", shawa: "Шаурма по-турецки", doner: "Настоящий Донер" };
+    const orderData = { kebab: 0, burger: 0, shawa: 0, doner: 0 };
+    const prices = { kebab: 440, burger: 350, shawa: 350, doner: 350 };
+    const names = { kebab: "Искандер Кебаб", burger: "Фирменный РD", shawa: "Шаурма по-турецки", doner: "Настоящий Донер" };
 
-    function modifyItem(id, change) {
-        basket[id] += change;
-        if (basket[id] < 0) basket[id] = 0;
-        document.getElementById("qty-" + id).innerText = basket[id];
-        runCalc();
+    function changeCount(id, delta) {
+        orderData[id] += delta;
+        if (orderData[id] < 0) orderData[id] = 0;
+        document.getElementById("qty-" + id).innerText = orderData[id];
+        updateTotalBox();
     }
 
-    function runCalc() {
-        let totalItems = 0;
-        Object.keys(basket).forEach(id => { totalItems += basket[id] * cost[id]; });
-        
+    function updateDelivery() {
         const type = document.getElementById("delivery-type").value;
         document.getElementById("address-block").style.display = (type === "delivery") ? "block" : "none";
+        updateTotalBox();
+    }
+
+    function updateTotalBox() {
+        let itemsSum = 0;
+        Object.keys(orderData).forEach(id => { itemsSum += orderData[id] * prices[id]; });
         
-        let fee = 0;
-        if (type === "delivery" && totalItems > 0) {
-            fee = (totalItems >= 1500) ? 0 : 150;
+        let deliveryFee = 0;
+        const type = document.getElementById("delivery-type").value;
+        if (type === "delivery" && itemsSum > 0) {
+            deliveryFee = (itemsSum >= 1500) ? 0 : 150;
         }
         
-        document.getElementById("total-price").innerText = totalItems + fee;
+        document.getElementById("total-price").innerText = itemsSum + deliveryFee;
+        return { itemsSum, deliveryFee, finalSum: itemsSum + deliveryFee };
+    }
+
+    function sendOrder(event) {
+        const sums = updateTotalBox();
+        const type = document.getElementById("delivery-type").value;
+        const nameInput = document.getElementById("client-name").value.trim();
+        const addressInput = document.getElementById("client-address").value.trim();
+
+        if (sums.itemsSum === 0) {
+            event.preventDefault();
+            alert("Пожалуйста, выберите блюда!");
+            return;
+        }
+        if (type === "delivery" && !addressInput) {
+            event.preventDefault();
+            alert("Пожалуйста, укажите адрес доставки!");
+            return;
+        }
+
+        let txt = "*Новый заказ в Le Papa Martin*\n\n";
+        if (nameInput) txt += "👤 *Клиент:* " + nameInput + "\n\n";
+        
+        txt += "📦 *Состав заказа:*\n";
+        Object.keys(orderData).forEach(id => {
+            if (orderData[id] > 0) {
+                txt += "▪️ " + names[id] + " x" + orderData[id] + " (" + (orderData[id] * prices[id]) + " сом)\n";
+            }
+        });
+        
+        txt += "\n🏪 *Способ:* " + (type === "delivery" ? "Доставка" : "Самовывоз");
+        if (type === "delivery") {
+            txt += "\n📍 *Адрес:* " + addressInput;
+            txt += "\n🚚 *Доставка:* " + (sums.deliveryFee === 0 ? "Бесплатно" : sums.deliveryFee + " сом");
+        }
+        txt += "\n\n💰 *ИТОГО К ОПЛАТЕ:* " + sums.finalSum + " сом\n\nПожалуйста, подтвердите заказ.";
+
+        const link = document.getElementById("whatsapp-link");
+        link.href = "whatsapp://send?phone=996773881764&text=" + encodeURIComponent(txt);
+    }
+</script>
+
+</body>
+</html>
