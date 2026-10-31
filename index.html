@@ -1,12 +1,13 @@
 <!DOCTYPE html>
-<html>
+<html class="notranslate" translate="no">
 <head>
     <meta charset="UTF-8">
+    <meta name="google" content="notranslate">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Le Papa Martin</title>
     <style>
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            font-family: sans-serif;
             background-color: #121212;
             color: #fff;
             margin: 0;
@@ -29,9 +30,7 @@
             margin-top: 5px;
             margin-bottom: 20px;
             font-size: 26px;
-            letter-spacing: 1px;
         }
-        /* Крупные вертикальные карточки товаров */
         .menu-item {
             background: #2a2a2a;
             margin-bottom: 20px;
@@ -41,7 +40,6 @@
             display: flex;
             flex-direction: column;
         }
-        /* Фотография теперь занимает верхнюю половину блока */
         .item-img {
             width: 100%;
             height: 220px;
@@ -49,7 +47,6 @@
             background-color: #3b3b3b;
             border-bottom: 2px solid #ff9800;
         }
-        /* Блок с текстом и кнопками под фото */
         .item-details {
             padding: 15px;
             display: flex;
@@ -62,7 +59,6 @@
             color: #fff;
             margin: 0;
         }
-        /* Нижняя строка: цена слева, управление справа */
         .item-row {
             display: flex;
             justify-content: space-between;
@@ -92,10 +88,6 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: background 0.2s, transform 0.1s;
-        }
-        .btn-qty:active {
-            transform: scale(0.95);
         }
         .qty {
             font-size: 18px;
@@ -127,10 +119,6 @@
             border-radius: 10px;
             font-size: 15px;
             box-sizing: border-box;
-        }
-        .form-group input:focus, .form-group select:focus {
-            border-color: #ff9800;
-            outline: none;
         }
         .info-box {
             background: #2a2a2a;
@@ -175,31 +163,24 @@
             text-decoration: none;
             display: block;
             box-sizing: border-box;
-            box-shadow: 0 4px 12px rgba(0,230,118,0.2);
-            transition: background 0.2s;
-        }
-        .btn-whatsapp:hover {
-            background: #00c853;
-            color: #fff;
         }
     </style>
 </head>
 <body>
 
 <div class="menu-container">
-    <h2>🍔 Le Papa Martin 🌯</h2>
+    <h2> Le Papa Martin </h2>
     
-    <!-- Сюда скрипт выведет крупные карточки с фото на пол-экрана -->
     <div id="menu-items"></div>
 
     <div class="form-section">
         <div class="form-group">
             <label>Ваше имя:</label>
-            <input type="text" id="client-name" placeholder="Введите ваше имя">
+            <input type="text" id="client-name" placeholder="Введите имя">
         </div>
         <div class="form-group">
             <label>Способ получения:</label>
-            <select id="delivery-type">
+            <select id="delivery-type" onchange="calculateTotal()">
                 <option value="pickup">Самовывоз (Бесплатно)</option>
                 <option value="delivery">Доставка (150 сом / От 1500 бесплатно)</option>
             </select>
@@ -213,8 +194,8 @@
     <div class="info-box">
         <div class="account-num">500043714</div>
         <div class="requisites">
-            <p style="margin:0 0 5px 0;"><strong>📌 Реквизиты для оплаты:</strong></p>
-            <p style="margin:0;">Кошелек администратора: +996 773 881 764 (MBank, О!Деньги)</p>
+            <p><strong>📌 Реквизиты для оплаты:</strong></p>
+            <p>Кошелек администратора: +996 773 881 764 (MBank, О!Деньги)</p>
         </div>
     </div>
 
@@ -228,7 +209,6 @@
 <script>
     const adminPhoneNumber = "996773881764";
 
-    // Меню с проверенными и крупными фотографиями
     const menu = {
         "1": { name: "Искандер Кебаб", price: 440, qty: 0, img: "https://unsplash.com" },
         "2": { name: "Фирменный РD", price: 350, qty: 0, img: "https://unsplash.com" },
@@ -246,21 +226,7 @@
             const itemDiv = document.createElement('div');
             itemDiv.className = 'menu-item';
             
-            // Новая структура: крупное фото сверху, детали и кнопки под ним
-            itemDiv.innerHTML = `
-                <img class="item-img" src="${item.img}" alt="${item.name}">
-                <div class="item-details">
-                    <div class="item-title">${item.name}</div>
-                    <div class="item-row">
-                        <div class="item-price">${item.price} сом</div>
-                        <div class="controls">
-                            <button class="btn-qty" onclick="modifyQty('${id}', -1)">-</button>
-                            <span class="qty" id="qty-${id}">${item.qty}</span>
-                            <button class="btn-qty" onclick="modifyQty('${id}', 1)">+</button>
-                        </div>
-                    </div>
-                </div>
-            `;
+            itemDiv.innerHTML = '<img class="item-img" src="' + item.img + '"><div class="item-details"><div class="item-title">' + item.name + '</div><div class="item-row"><div class="item-price">' + item.price + ' сом</div><div class="controls"><button class="btn-qty" onclick="modifyQty(\'' + id + '\', -1)">-</button><span class="qty" id="qty-' + id + '">' + item.qty + '</span><button class="btn-qty" onclick="modifyQty(\'' + id + '\', 1)">+</button></div></div></div>';
             container.appendChild(itemDiv);
         });
     }
@@ -300,3 +266,30 @@
 
     function sendOrder(event) {
         const data = calculateTotal();
+        const deliveryType = document.getElementById('delivery-type').value;
+        const clientName = document.getElementById('client-name').value.trim();
+        const clientAddress = document.getElementById('client-address').value.trim();
+
+        if (data.itemsTotal === 0) {
+            event.preventDefault();
+            alert('Пожалуйста, выберите хотя бы одно блюдо!');
+            return;
+        }
+        if (deliveryType === 'delivery' && !clientAddress) {
+            event.preventDefault();
+            alert('Пожалуйста, укажите адрес доставки!');
+            return;
+        }
+
+        let message = "*Новый заказ в Le Papa Martin*\n\n";
+        if (clientName) message += "👤 *Клиент:* " + clientName + "\n\n";
+        message += "📦 *Состав заказа:*\n";
+        Object.keys(menu).forEach(id => {
+            const item = menu[id];
+            if (item.qty > 0) {
+                message += "▪️ " + item.name + " x" + item.qty + " (" + (item.qty * item.price) + " сом)\n";
+            }
+        });
+        message += "\n🏪 *Способ:* " + (deliveryType === 'delivery' ? 'Доставка' : 'Самовывоз');
+        if (deliveryType === 'delivery') {
+            message += "\n📍 *Адрес:* " + clientAddress;
