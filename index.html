@@ -141,7 +141,7 @@
 <body>
 
 <div class="menu-container">
-    <h2> Le Papa Martin </h2>
+    <h2>Le Papa Martin</h2>
     
     <div id="menu-items"></div>
 
@@ -152,7 +152,7 @@
         </div>
         <div class="form-group">
             <label>Способ получения:</label>
-            <select id="delivery-type" onchange="calculateTotal()">
+            <select id="delivery-type" id="delivery-select">
                 <option value="pickup">Самовывоз (Бесплатно)</option>
                 <option value="delivery">Доставка (150 сом / От 1500 бесплатно)</option>
             </select>
@@ -269,10 +269,16 @@
         linkElement.href = "whatsapp://send?phone=" + adminPhoneNumber + "&text=" + encodedMessage;
     }
 
-    // Запускаем отрисовку строго ПОСЛЕ полной загрузки страницы браузером
-    window.onload = function() {
+    document.addEventListener("DOMContentLoaded", function() {
         renderMenu();
-    };
+        const delType = document.getElementById('delivery-type');
+        if(delType) {
+            delType.addEventListener('change', calculateTotal);
+        }
+    });
+    
+    // Дублирующий вызов для надежности на случай кэша GitHub
+    setTimeout(renderMenu, 100);
 </script>
 
 </body>
