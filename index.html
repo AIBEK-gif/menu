@@ -152,7 +152,7 @@
         </div>
         <div class="form-group">
             <label>Способ получения:</label>
-            <select id="delivery-type" id="delivery-select">
+            <select id="delivery-type">
                 <option value="pickup">Самовывоз (Бесплатно)</option>
                 <option value="delivery">Доставка (150 сом / От 1500 бесплатно)</option>
             </select>
@@ -277,8 +277,7 @@
         }
     });
     
-    // Дублирующий вызов для надежности на случай кэша GitHub
-    setTimeout(renderMenu, 100);
+    setTimeout(renderMenu, 300);
 </script>
 
 </body>
