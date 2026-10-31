@@ -141,7 +141,7 @@
 <body>
 
 <div class="menu-container">
-    <h2>🍔 Le Papa Martin 🌯</h2>
+    <h2> Le Papa Martin </h2>
     
     <div id="menu-items"></div>
 
@@ -269,7 +269,10 @@
         linkElement.href = "whatsapp://send?phone=" + adminPhoneNumber + "&text=" + encodedMessage;
     }
 
-    renderMenu();
+    // Запускаем отрисовку строго ПОСЛЕ полной загрузки страницы браузером
+    window.onload = function() {
+        renderMenu();
+    };
 </script>
 
 </body>
