@@ -6,11 +6,11 @@
     <title>Le Papa Martin</title>
     <style>
         body {
-            font-family: sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             background-color: #121212;
             color: #fff;
             margin: 0;
-            padding: 15px;
+            padding: 10px;
             display: flex;
             justify-content: center;
         }
@@ -18,69 +18,99 @@
             max-width: 450px;
             width: 100%;
             background: #1e1e1e;
-            padding: 20px;
-            border-radius: 16px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+            padding: 15px;
+            border-radius: 20px;
+            box-shadow: 0 4px 25px rgba(0,0,0,0.7);
             box-sizing: border-box;
         }
         h2 {
             text-align: center;
             color: #ff9800;
-            margin-top: 0;
+            margin-top: 5px;
+            margin-bottom: 20px;
+            font-size: 26px;
+            letter-spacing: 1px;
         }
+        /* Крупные вертикальные карточки товаров */
         .menu-item {
+            background: #2a2a2a;
+            margin-bottom: 20px;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            display: flex;
+            flex-direction: column;
+        }
+        /* Фотография теперь занимает верхнюю половину блока */
+        .item-img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            background-color: #3b3b3b;
+            border-bottom: 2px solid #ff9800;
+        }
+        /* Блок с текстом и кнопками под фото */
+        .item-details {
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .item-title {
+            font-weight: bold;
+            font-size: 19px;
+            color: #fff;
+            margin: 0;
+        }
+        /* Нижняя строка: цена слева, управление справа */
+        .item-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: #2a2a2a;
-            padding: 10px;
-            margin-bottom: 12px;
-            border-radius: 12px;
+            margin-top: 5px;
         }
-        .item-left {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        .item-img {
-            width: 65px;
-            height: 65px;
-            border-radius: 10px;
-            object-fit: cover;
-            background-color: #3b3b3b;
-        }
-        .item-info .name {
-            font-weight: bold;
-            font-size: 16px;
-        }
-        .item-info .price {
+        .item-price {
             color: #ffb74d;
-            font-size: 14px;
-            margin-top: 4px;
+            font-size: 18px;
+            font-weight: 700;
         }
         .controls {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 14px;
         }
         .btn-qty {
             background: #ff9800;
             color: #000;
             border: none;
-            width: 32px;
-            height: 32px;
-            border-radius: 8px;
-            font-size: 20px;
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            font-size: 22px;
             font-weight: bold;
             cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s, transform 0.1s;
+        }
+        .btn-qty:active {
+            transform: scale(0.95);
+        }
+        .qty {
+            font-size: 18px;
+            font-weight: bold;
+            min-width: 24px;
+            text-align: center;
+            color: #fff;
         }
         .form-section {
-            margin: 20px 0;
+            margin: 25px 0 15px 0;
             border-top: 1px dashed #444;
-            padding-top: 15px;
+            padding-top: 20px;
         }
         .form-group {
-            margin-bottom: 12px;
+            margin-bottom: 15px;
         }
         .form-group label {
             display: block;
@@ -90,65 +120,82 @@
         }
         .form-group input, .form-group select {
             width: 100%;
-            padding: 10px;
+            padding: 12px;
             background: #2a2a2a;
             color: #fff;
             border: 1px solid #444;
-            border-radius: 8px;
+            border-radius: 10px;
             font-size: 15px;
             box-sizing: border-box;
         }
+        .form-group input:focus, .form-group select:focus {
+            border-color: #ff9800;
+            outline: none;
+        }
         .info-box {
             background: #2a2a2a;
-            padding: 12px;
-            border-radius: 8px;
+            padding: 14px;
+            border-radius: 10px;
             border-left: 4px solid #ff9800;
             margin-bottom: 20px;
             font-size: 13px;
+            color: #ccc;
+            line-height: 1.4;
         }
         .account-num {
             background: #121212;
             padding: 4px 8px;
             display: inline-block;
             border-radius: 4px;
-            margin-bottom: 5px;
+            margin-bottom: 8px;
             color: #ff9800;
+            font-family: monospace;
+            font-weight: bold;
         }
         .total-box {
             text-align: right;
-            font-size: 19px;
+            font-size: 21px;
             font-weight: bold;
             margin-bottom: 20px;
             color: #ffb74d;
+            border-bottom: 1px solid #444;
+            padding-bottom: 12px;
         }
         .btn-whatsapp {
             background: #00e676;
             color: #000;
             border: none;
             width: 100%;
-            padding: 15px;
-            font-size: 16px;
+            padding: 16px;
+            font-size: 17px;
             font-weight: bold;
-            border-radius: 10px;
+            border-radius: 12px;
             cursor: pointer;
             text-align: center;
             text-decoration: none;
             display: block;
             box-sizing: border-box;
+            box-shadow: 0 4px 12px rgba(0,230,118,0.2);
+            transition: background 0.2s;
+        }
+        .btn-whatsapp:hover {
+            background: #00c853;
+            color: #fff;
         }
     </style>
 </head>
 <body>
 
 <div class="menu-container">
-    <h2>Le Papa Martin</h2>
+    <h2>🍔 Le Papa Martin 🌯</h2>
     
+    <!-- Сюда скрипт выведет крупные карточки с фото на пол-экрана -->
     <div id="menu-items"></div>
 
     <div class="form-section">
         <div class="form-group">
             <label>Ваше имя:</label>
-            <input type="text" id="client-name" placeholder="Введите имя">
+            <input type="text" id="client-name" placeholder="Введите ваше имя">
         </div>
         <div class="form-group">
             <label>Способ получения:</label>
@@ -166,8 +213,8 @@
     <div class="info-box">
         <div class="account-num">500043714</div>
         <div class="requisites">
-            <p><strong>📌 Реквизиты для оплаты:</strong></p>
-            <p>Кошелек администратора: +996 773 881 764 (MBank, О!Деньги)</p>
+            <p style="margin:0 0 5px 0;"><strong>📌 Реквизиты для оплаты:</strong></p>
+            <p style="margin:0;">Кошелек администратора: +996 773 881 764 (MBank, О!Деньги)</p>
         </div>
     </div>
 
@@ -181,6 +228,7 @@
 <script>
     const adminPhoneNumber = "996773881764";
 
+    // Меню с проверенными и крупными фотографиями
     const menu = {
         "1": { name: "Искандер Кебаб", price: 440, qty: 0, img: "https://unsplash.com" },
         "2": { name: "Фирменный РD", price: 350, qty: 0, img: "https://unsplash.com" },
@@ -192,11 +240,27 @@
         const container = document.getElementById('menu-items');
         if (!container) return;
         container.innerHTML = '';
+        
         Object.keys(menu).forEach(id => {
             const item = menu[id];
             const itemDiv = document.createElement('div');
             itemDiv.className = 'menu-item';
-            itemDiv.innerHTML = '<div class="item-left"><img class="item-img" src="' + item.img + '"><div class="item-info"><div class="name">' + item.name + '</div><div class="price">' + item.price + ' сом</div></div></div><div class="controls"><button class="btn-qty" onclick="modifyQty(\'' + id + '\', -1)">-</button><span class="qty" id="qty-' + id + '">' + item.qty + '</span><button class="btn-qty" onclick="modifyQty(\'' + id + '\', 1)">+</button></div>';
+            
+            // Новая структура: крупное фото сверху, детали и кнопки под ним
+            itemDiv.innerHTML = `
+                <img class="item-img" src="${item.img}" alt="${item.name}">
+                <div class="item-details">
+                    <div class="item-title">${item.name}</div>
+                    <div class="item-row">
+                        <div class="item-price">${item.price} сом</div>
+                        <div class="controls">
+                            <button class="btn-qty" onclick="modifyQty('${id}', -1)">-</button>
+                            <span class="qty" id="qty-${id}">${item.qty}</span>
+                            <button class="btn-qty" onclick="modifyQty('${id}', 1)">+</button>
+                        </div>
+                    </div>
+                </div>
+            `;
             container.appendChild(itemDiv);
         });
     }
@@ -215,9 +279,11 @@
         Object.keys(menu).forEach(id => {
             itemsTotal += menu[id].qty * menu[id].price;
         });
+        
         const deliveryType = document.getElementById('delivery-type').value;
         const addressBlock = document.getElementById('address-block');
         let deliveryFee = 0;
+        
         if (deliveryType === 'delivery') {
             addressBlock.style.display = 'block';
             if (itemsTotal > 0) {
@@ -226,6 +292,7 @@
         } else {
             addressBlock.style.display = 'none';
         }
+        
         const finalTotal = itemsTotal + deliveryFee;
         document.getElementById('total-price').innerText = finalTotal;
         return { itemsTotal, deliveryFee, finalTotal };
@@ -233,52 +300,3 @@
 
     function sendOrder(event) {
         const data = calculateTotal();
-        const deliveryType = document.getElementById('delivery-type').value;
-        const clientName = document.getElementById('client-name').value.trim();
-        const clientAddress = document.getElementById('client-address').value.trim();
-
-        if (data.itemsTotal === 0) {
-            event.preventDefault();
-            alert('Пожалуйста, выберите хотя бы одно блюдо!');
-            return;
-        }
-        if (deliveryType === 'delivery' && !clientAddress) {
-            event.preventDefault();
-            alert('Пожалуйста, укажите адрес доставки!');
-            return;
-        }
-
-        let message = "*Новый заказ в Le Papa Martin*\n\n";
-        if (clientName) message += "👤 *Клиент:* " + clientName + "\n\n";
-        message += "📦 *Состав заказа:*\n";
-        Object.keys(menu).forEach(id => {
-            const item = menu[id];
-            if (item.qty > 0) {
-                message += "▪️ " + item.name + " x" + item.qty + " (" + (item.qty * item.price) + " сом)\n";
-            }
-        });
-        message += "\n🏪 *Способ:* " + (deliveryType === 'delivery' ? 'Доставка' : 'Самовывоз');
-        if (deliveryType === 'delivery') {
-            message += "\n📍 *Адрес:* " + clientAddress;
-            message += "\n🚚 *Доставка:* " + (data.deliveryFee === 0 ? 'Бесплатно' : data.deliveryFee + ' сом');
-        }
-        message += "\n\n💰 *ИТОГО К ОПЛАТЕ:* " + data.finalTotal + " сом\n\nПожалуйста, подтвердите заказ.";
-
-        const encodedMessage = encodeURIComponent(message);
-        const linkElement = document.getElementById('whatsapp-link');
-        linkElement.href = "whatsapp://send?phone=" + adminPhoneNumber + "&text=" + encodedMessage;
-    }
-
-    document.addEventListener("DOMContentLoaded", function() {
-        renderMenu();
-        const delType = document.getElementById('delivery-type');
-        if(delType) {
-            delType.addEventListener('change', calculateTotal);
-        }
-    });
-    
-    setTimeout(renderMenu, 300);
-</script>
-
-</body>
-</html>
