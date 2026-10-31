@@ -158,7 +158,8 @@
         Итого к оплате: <span id="total-price">0</span> сом
     </div>
 
-    <button class="btn-whatsapp" onclick="sendOrder()">Оформить и отправить в WhatsApp</button>
+    <!-- Заменили элемент button на прямую ссылку для обхода блокировок Safari -->
+    <a id="whatsapp-link" class="btn-whatsapp" href="#" onclick="sendOrder(event)">Оформить и отправить в WhatsApp</a>
 </div>
 
 <script>
@@ -221,11 +222,12 @@
         return { itemsTotal, deliveryFee, finalTotal };
     }
 
-    function sendOrder() {
+    function sendOrder(event) {
         const { itemsTotal, deliveryFee, finalTotal } = calculateTotal();
         const deliveryType = document.getElementById('delivery-type').value;
 
         if (itemsTotal === 0) {
+            event.preventDefault();
             alert('Пожалуйста, выберите хотя бы одно блюдо!');
             return;
         }
@@ -247,7 +249,12 @@
         message += "Пожалуйста, подтвердите заказ и вышлите реквизиты.";
 
         const encodedMessage = encodeURIComponent(message);
-        window.location.href = "https://wa.me" + adminPhoneNumber + "?text=" + encodedMessage;
+        const whatsappUrl = "https://wa.me" + adminPhoneNumber + "?text=" + encodedMessage;
+        
+        // Меняем ссылку ссылки прямо перед переходом — бронебойный метод для Safari на iPhone
+        const linkElement = document.getElementById('whatsapp-link');
+        linkElement.href = whatsappUrl;
+        linkElement.target = '_blank';
     }
 
     renderMenu();
