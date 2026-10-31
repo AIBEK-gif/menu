@@ -1,8 +1,7 @@
 <!DOCTYPE html>
-<html class="notranslate" translate="no">
+<html>
 <head>
     <meta charset="UTF-8">
-    <meta name="google" content="notranslate">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Le Papa Martin</title>
     <style>
@@ -169,9 +168,69 @@
 <body>
 
 <div class="menu-container">
-    <h2> Le Papa Martin </h2>
+    <h2>Le Papa Martin</h2>
     
-    <div id="menu-items"></div>
+    <div id="menu-items">
+        <div class="menu-item">
+            <img class="item-img" src="https://unsplash.com">
+            <div class="item-details">
+                <div class="item-title">Искандер Кебаб</div>
+                <div class="item-row">
+                    <div class="item-price">440 сом</div>
+                    <div class="controls">
+                        <button class="btn-qty" onclick="changeCount('kebab', -1)">-</button>
+                        <span class="qty" id="qty-kebab">0</span>
+                        <button class="btn-qty" onclick="changeCount('kebab', 1)">+</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="menu-item">
+            <img class="item-img" src="https://unsplash.com">
+            <div class="item-details">
+                <div class="item-title">Фирменный РD</div>
+                <div class="item-row">
+                    <div class="item-price">350 сом</div>
+                    <div class="controls">
+                        <button class="btn-qty" onclick="changeCount('burger', -1)">-</button>
+                        <span class="qty" id="qty-burger">0</span>
+                        <button class="btn-qty" onclick="changeCount('burger', 1)">+</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="menu-item">
+            <img class="item-img" src="https://unsplash.com">
+            <div class="item-details">
+                <div class="item-title">Шаурма по-турецки</div>
+                <div class="item-row">
+                    <div class="item-price">350 сом</div>
+                    <div class="controls">
+                        <button class="btn-qty" onclick="changeCount('shawa', -1)">-</button>
+                        <span class="qty" id="qty-shawa">0</span>
+                        <button class="btn-qty" onclick="changeCount('shawa', 1)">+</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="menu-item">
+            <img class="item-img" src="https://unsplash.com">
+            <div class="item-details">
+                <div class="item-title">Настоящий Донер</div>
+                <div class="item-row">
+                    <div class="item-price">350 сом</div>
+                    <div class="controls">
+                        <button class="btn-qty" onclick="changeCount('doner', -1)">-</button>
+                        <span class="qty" id="qty-doner">0</span>
+                        <button class="btn-qty" onclick="changeCount('doner', 1)">+</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div class="form-section">
         <div class="form-group">
@@ -180,7 +239,7 @@
         </div>
         <div class="form-group">
             <label>Способ получения:</label>
-            <select id="delivery-type" onchange="calculateTotal()">
+            <select id="delivery-type" onchange="updateDelivery()">
                 <option value="pickup">Самовывоз (Бесплатно)</option>
                 <option value="delivery">Доставка (150 сом / От 1500 бесплатно)</option>
             </select>
@@ -207,89 +266,31 @@
 </div>
 
 <script>
-    const adminPhoneNumber = "996773881764";
+    const orderData = { kebab: 0, burger: 0, shawa: 0, doner: 0 };
+    const prices = { kebab: 440, burger: 350, shawa: 350, doner: 350 };
+    const names = { kebab: "Искандер Кебаб", burger: "Фирменный РD", shawa: "Шаурма по-турецки", doner: "Настоящий Донер" };
 
-    const menu = {
-        "1": { name: "Искандер Кебаб", price: 440, qty: 0, img: "https://unsplash.com" },
-        "2": { name: "Фирменный РD", price: 350, qty: 0, img: "https://unsplash.com" },
-        "3": { name: "Шаурма по-турецки", price: 350, qty: 0, img: "https://unsplash.com" },
-        "4": { name: "Настоящий Донер", price: 350, qty: 0, img: "https://unsplash.com" }
-    };
-
-    function renderMenu() {
-        const container = document.getElementById('menu-items');
-        if (!container) return;
-        container.innerHTML = '';
-        
-        Object.keys(menu).forEach(id => {
-            const item = menu[id];
-            const itemDiv = document.createElement('div');
-            itemDiv.className = 'menu-item';
-            
-            itemDiv.innerHTML = '<img class="item-img" src="' + item.img + '"><div class="item-details"><div class="item-title">' + item.name + '</div><div class="item-row"><div class="item-price">' + item.price + ' сом</div><div class="controls"><button class="btn-qty" onclick="modifyQty(\'' + id + '\', -1)">-</button><span class="qty" id="qty-' + id + '">' + item.qty + '</span><button class="btn-qty" onclick="modifyQty(\'' + id + '\', 1)">+</button></div></div></div>';
-            container.appendChild(itemDiv);
-        });
+    function changeCount(id, delta) {
+        orderData[id] += delta;
+        if (orderData[id] < 0) orderData[id] = 0;
+        document.getElementById("qty-" + id).innerText = orderData[id];
+        updateTotalBox();
     }
 
-    function modifyQty(id, change) {
-        if (menu[id]) {
-            menu[id].qty += change;
-            if (menu[id].qty < 0) menu[id].qty = 0;
-            document.getElementById('qty-' + id).innerText = menu[id].qty;
-            calculateTotal();
-        }
+    function updateDelivery() {
+        const type = document.getElementById("delivery-type").value;
+        document.getElementById("address-block").style.display = (type === "delivery") ? "block" : "none";
+        updateTotalBox();
     }
 
-    function calculateTotal() {
-        let itemsTotal = 0;
-        Object.keys(menu).forEach(id => {
-            itemsTotal += menu[id].qty * menu[id].price;
-        });
+    function updateTotalBox() {
+        let itemsSum = 0;
+        Object.keys(orderData).forEach(id => { itemsSum += orderData[id] * prices[id]; });
         
-        const deliveryType = document.getElementById('delivery-type').value;
-        const addressBlock = document.getElementById('address-block');
         let deliveryFee = 0;
-        
-        if (deliveryType === 'delivery') {
-            addressBlock.style.display = 'block';
-            if (itemsTotal > 0) {
-                deliveryFee = itemsTotal >= 1500 ? 0 : 150;
-            }
-        } else {
-            addressBlock.style.display = 'none';
+        const type = document.getElementById("delivery-type").value;
+        if (type === "delivery" && itemsSum > 0) {
+            deliveryFee = (itemsSum >= 1500) ? 0 : 150;
         }
         
-        const finalTotal = itemsTotal + deliveryFee;
-        document.getElementById('total-price').innerText = finalTotal;
-        return { itemsTotal, deliveryFee, finalTotal };
-    }
-
-    function sendOrder(event) {
-        const data = calculateTotal();
-        const deliveryType = document.getElementById('delivery-type').value;
-        const clientName = document.getElementById('client-name').value.trim();
-        const clientAddress = document.getElementById('client-address').value.trim();
-
-        if (data.itemsTotal === 0) {
-            event.preventDefault();
-            alert('Пожалуйста, выберите хотя бы одно блюдо!');
-            return;
-        }
-        if (deliveryType === 'delivery' && !clientAddress) {
-            event.preventDefault();
-            alert('Пожалуйста, укажите адрес доставки!');
-            return;
-        }
-
-        let message = "*Новый заказ в Le Papa Martin*\n\n";
-        if (clientName) message += "👤 *Клиент:* " + clientName + "\n\n";
-        message += "📦 *Состав заказа:*\n";
-        Object.keys(menu).forEach(id => {
-            const item = menu[id];
-            if (item.qty > 0) {
-                message += "▪️ " + item.name + " x" + item.qty + " (" + (item.qty * item.price) + " сом)\n";
-            }
-        });
-        message += "\n🏪 *Способ:* " + (deliveryType === 'delivery' ? 'Доставка' : 'Самовывоз');
-        if (deliveryType === 'delivery') {
-            message += "\n📍 *Адрес:* " + clientAddress;
+        document.getElementById("total-price").innerText = itemsSum + deliveryFee;
