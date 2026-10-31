@@ -6,7 +6,7 @@
     <title>Le Papa Martin</title>
     <style>
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            font-family: sans-serif;
             background-color: #121212;
             color: #fff;
             margin: 0;
@@ -27,7 +27,6 @@
             text-align: center;
             color: #ff9800;
             margin-top: 0;
-            font-size: 24px;
         }
         .menu-item {
             display: flex;
@@ -37,7 +36,6 @@
             padding: 10px;
             margin-bottom: 12px;
             border-radius: 12px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
         }
         .item-left {
             display: flex;
@@ -54,13 +52,11 @@
         .item-info .name {
             font-weight: bold;
             font-size: 16px;
-            color: #fff;
         }
         .item-info .price {
             color: #ffb74d;
             font-size: 14px;
             margin-top: 4px;
-            font-weight: 600;
         }
         .controls {
             display: flex;
@@ -77,19 +73,6 @@
             font-size: 20px;
             font-weight: bold;
             cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: background 0.2s;
-        }
-        .btn-qty:hover {
-            background: #e68a00;
-        }
-        .qty {
-            font-size: 16px;
-            font-weight: bold;
-            min-width: 20px;
-            text-align: center;
         }
         .form-section {
             margin: 20px 0;
@@ -115,10 +98,6 @@
             font-size: 15px;
             box-sizing: border-box;
         }
-        .form-group input:focus, .form-group select:focus {
-            border-color: #ff9800;
-            outline: none;
-        }
         .info-box {
             background: #2a2a2a;
             padding: 12px;
@@ -126,20 +105,14 @@
             border-left: 4px solid #ff9800;
             margin-bottom: 20px;
             font-size: 13px;
-            color: #ccc;
         }
-        .account-num, .account-code {
+        .account-num {
             background: #121212;
             padding: 4px 8px;
             display: inline-block;
             border-radius: 4px;
-            font-family: monospace;
             margin-bottom: 5px;
             color: #ff9800;
-        }
-        .requisites ul {
-            padding-left: 18px;
-            margin: 5px 0 0 0;
         }
         .total-box {
             text-align: right;
@@ -147,8 +120,6 @@
             font-weight: bold;
             margin-bottom: 20px;
             color: #ffb74d;
-            border-bottom: 1px solid #444;
-            padding-bottom: 10px;
         }
         .btn-whatsapp {
             background: #00e676;
@@ -164,35 +135,27 @@
             text-decoration: none;
             display: block;
             box-sizing: border-box;
-            transition: background 0.2s;
-        }
-        .btn-whatsapp:hover {
-            background: #00c853;
-            color: #fff;
         }
     </style>
 </head>
 <body>
 
 <div class="menu-container">
-    <h2>🍔 Le Papa Martin 🌯</h2>
-    
+    <h2> Le Papa Martin </h2>
     <div id="menu-items"></div>
 
     <div class="form-section">
         <div class="form-group">
             <label>Ваше имя:</label>
-            <input type="text" id="client-name" placeholder="Введите ваше имя">
+            <input type="text" id="client-name" placeholder="Введите имя">
         </div>
-
         <div class="form-group">
             <label>Способ получения:</label>
             <select id="delivery-type" onchange="calculateTotal()">
                 <option value="pickup">Самовывоз (Бесплатно)</option>
-                <option value="delivery">Доставка (150 сом / Бесплатно от 1500 сом)</option>
+                <option value="delivery">Доставка (150 сом / От 1500 бесплатно)</option>
             </select>
         </div>
-
         <div class="form-group" id="address-block" style="display: none;">
             <label>Адрес доставки:</label>
             <input type="text" id="client-address" placeholder="Улица, дом, квартира">
@@ -201,13 +164,9 @@
 
     <div class="info-box">
         <div class="account-num">500043714</div>
-        <div class="account-code">526</div>
         <div class="requisites">
-            <p><strong>📌 Реквизиты для выставления счета:</strong></p>
-            <ul>
-                <li>Кошелек администратора: +996 773 881 764</li>
-                <li>Банки: MBank, О!Деньги, Элсом</li>
-            </ul>
+            <p><strong>📌 Реквизиты для оплаты:</strong></p>
+            <p>Кошелек администратора: +996 773 881 764 (MBank, О!Деньги)</p>
         </div>
     </div>
 
@@ -221,7 +180,6 @@
 <script>
     const adminPhoneNumber = "996773881764";
 
-    // Сюда уже вставлена твоя прямая ссылка на бургер
     const menu = {
         "1": { name: "Искандер Кебаб", price: 440, qty: 0, img: "https://unsplash.com" },
         "2": { name: "Фирменный РD", price: 350, qty: 0, img: "https://ibb.co" },
@@ -232,25 +190,11 @@
     function renderMenu() {
         const container = document.getElementById('menu-items');
         container.innerHTML = '';
-        
         Object.keys(menu).forEach(id => {
             const item = menu[id];
             const itemDiv = document.createElement('div');
             itemDiv.className = 'menu-item';
-            itemDiv.innerHTML = `
-                <div class="item-left">
-                    <img class="item-img" src="${item.img}" alt="${item.name}">
-                    <div class="item-info">
-                        <div class="name">${item.name}</div>
-                        <div class="price">${item.price} сом</div>
-                    </div>
-                </div>
-                <div class="controls">
-                    <button class="btn-qty" onclick="modifyQty('${id}', -1)">-</button>
-                    <span class="qty" id="qty-${id}">${item.qty}</span>
-                    <button class="btn-qty" onclick="modifyQty('${id}', 1)">+</button>
-                </div>
-            `;
+            itemDiv.innerHTML = '<div class="item-left"><img class="item-img" src="' + item.img + '"><div class="item-info"><div class="name">' + item.name + '</div><div class="price">' + item.price + ' сом</div></div></div><div class="controls"><button class="btn-qty" onclick="modifyQty(\'' + id + '\', -1)">-</button><span class="qty" id="qty-' + id + '">' + item.qty + '</span><button class="btn-qty" onclick="modifyQty(\'' + id + '\', 1)">+</button></div>';
             container.appendChild(itemDiv);
         });
     }
@@ -259,7 +203,7 @@
         if (menu[id]) {
             menu[id].qty += change;
             if (menu[id].qty < 0) menu[id].qty = 0;
-            document.getElementById(`qty-${id}`).innerText = menu[id].qty;
+            document.getElementById('qty-' + id).innerText = menu[id].qty;
             calculateTotal();
         }
     }
@@ -269,11 +213,9 @@
         Object.keys(menu).forEach(id => {
             itemsTotal += menu[id].qty * menu[id].price;
         });
-
         const deliveryType = document.getElementById('delivery-type').value;
         const addressBlock = document.getElementById('address-block');
         let deliveryFee = 0;
-
         if (deliveryType === 'delivery') {
             addressBlock.style.display = 'block';
             if (itemsTotal > 0) {
@@ -282,24 +224,22 @@
         } else {
             addressBlock.style.display = 'none';
         }
-
         const finalTotal = itemsTotal + deliveryFee;
         document.getElementById('total-price').innerText = finalTotal;
         return { itemsTotal, deliveryFee, finalTotal };
     }
 
     function sendOrder(event) {
-        const { itemsTotal, deliveryFee, finalTotal } = calculateTotal();
+        const data = calculateTotal();
         const deliveryType = document.getElementById('delivery-type').value;
         const clientName = document.getElementById('client-name').value.trim();
         const clientAddress = document.getElementById('client-address').value.trim();
 
-        if (itemsTotal === 0) {
+        if (data.itemsTotal === 0) {
             event.preventDefault();
             alert('Пожалуйста, выберите хотя бы одно блюдо!');
             return;
         }
-
         if (deliveryType === 'delivery' && !clientAddress) {
             event.preventDefault();
             alert('Пожалуйста, укажите адрес доставки!');
@@ -307,5 +247,28 @@
         }
 
         let message = "*Новый заказ в Le Papa Martin*\n\n";
-        
-        if (clientName) {
+        if (clientName) message += "👤 *Клиент:* " + clientName + "\n\n";
+        message += "📦 *Состав заказа:*\n";
+        Object.keys(menu).forEach(id => {
+            const item = menu[id];
+            if (item.qty > 0) {
+                message += "▪️ " + item.name + " x" + item.qty + " (" + (item.qty * item.price) + " сом)\n";
+            }
+        });
+        message += "\n🏪 *Способ:* " + (deliveryType === 'delivery' ? 'Доставка' : 'Самовывоз');
+        if (deliveryType === 'delivery') {
+            message += "\n📍 *Адрес:* " + clientAddress;
+            message += "\n🚚 *Доставка:* " + (data.deliveryFee === 0 ? 'Бесплатно' : data.deliveryFee + ' сом');
+        }
+        message += "\n\n💰 *ИТОГО К ОПЛАТЕ:* " + data.finalTotal + " сом\n\nПожалуйста, подтвердите заказ.";
+
+        const encodedMessage = encodeURIComponent(message);
+        const linkElement = document.getElementById('whatsapp-link');
+        linkElement.href = "whatsapp://send?phone=" + adminPhoneNumber + "&text=" + encodedMessage;
+    }
+
+    renderMenu();
+</script>
+
+</body>
+</html>
