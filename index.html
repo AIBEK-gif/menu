@@ -6,90 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Papa Martin</title>
     
-    <script>
-        // Скрипт объявляем заранее в head, чтобы он точно был доступен до рендера элементов
-        let burgerQty = 0;
-        let shawarmaQty = 0;
-        const burgerPrice = 330;
-        const shawarmaPrice = 400;
-
-        function updateDisplay() {
-            const qtyBurgerEl = document.getElementById('qty-burger');
-            const qtyShawarmaEl = document.getElementById('qty-shawarma');
-            const totalValEl = document.getElementById('total-val');
-            const deliveryStatusEl = document.getElementById('delivery-status');
-
-            if(qtyBurgerEl) qtyBurgerEl.innerText = burgerQty;
-            if(qtyShawarmaEl) qtyShawarmaEl.innerText = shawarmaQty;
-            
-            let total = (burgerQty * burgerPrice) + (shawarmaQty * shawarmaPrice);
-            if(totalValEl) totalValEl.innerText = total;
-
-            if (deliveryStatusEl) {
-                if (total > 1500) {
-                    deliveryStatusEl.style.display = 'block';
-                } else {
-                    deliveryStatusEl.style.display = 'none';
-                }
-            }
-        }
-
-        function changeQty(type, action) {
-            if (type === 'burger') {
-                if (action === 'plus') burgerQty++;
-                if (action === 'minus' && burgerQty > 0) burgerQty--;
-            } else if (type === 'shawarma') {
-                if (action === 'plus') shawarmaQty++;
-                if (action === 'minus' && shawarmaQty > 0) shawarmaQty--;
-            }
-            updateDisplay();
-        }
-
-        function sendOrder() {
-            const phoneInput = document.getElementById('client-phone');
-            const addressInput = document.getElementById('client-address');
-            
-            if (!phoneInput || !addressInput) {
-                alert("Ошибка: Элементы формы не найдены.");
-                return;
-            }
-
-            const phone = phoneInput.value.trim();
-            const address = addressInput.value.trim();
-
-            if ((burgerQty + shawarmaQty) === 0) {
-                alert("Пожалуйста, добавьте хотя бы одно блюдо в заказ.");
-                return;
-            }
-
-            if (!phone || !address) {
-                alert("Пожалуйста, введите ваш номер телефона и адрес доставки.");
-                return;
-            }
-
-            let total = (burgerQty * burgerPrice) + (shawarmaQty * shawarmaPrice);
-
-            let text = "*Новый заказ из Papa Martin* 📋\n\n";
-            if (burgerQty > 0) text += `▪️ Бургер Говядина x ${burgerQty} шт. (${burgerQty * burgerPrice} сом)\n`;
-            if (shawarmaQty > 0) text += `▪️ Шаурма Куриная x ${shawarmaQty} шт. (${shawarmaQty * shawarmaPrice} сом)\n`;
-            
-            text += `\n*Итоговая сумма:* ${total} сом\n`;
-            if (total > 1500) {
-                text += `🚚 *Доставка:* Бесплатная\n\n`;
-            } else {
-                text += `🚚 *Доставка:* По тарифу\n\n`;
-            }
-            
-            text += `👤 *Контакты:* ${phone}\n`;
-            text += `📍 *Адрес доставки:* ${address}`;
-
-            let whatsappUrl = "https://wa.me" + encodeURIComponent(text);
-            
-            // Самый пробивной метод перехода, работающий в WebView Instagram/Facebook
-            window.location.href = whatsappUrl;
-        }
-    </script>
-
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif; }
         body { background: #f9f9f9; padding: 15px; padding-bottom: 140px; color: #2c3e50; }
@@ -107,12 +23,12 @@
         .input-group label { display: block; font-size: 12px; color: #7f8c8d; margin-bottom: 4px; }
         .input-group input, .input-group textarea { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; outline: none; background: #fff; }
         
-        /* Упростили фиксированную панель, чтобы исключить наложение слоев */
         .fixed-bottom { position: fixed; bottom: 0; left: 0; right: 0; background: #fff; padding: 15px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 -3px 10px rgba(0,0,0,0.1); z-index: 999999; }
         .total-box { display: flex; flex-direction: column; }
         .total-sum { font-size: 20px; font-weight: bold; }
         .delivery-note { font-size: 11px; color: #27ae60; margin-top: 2px; font-weight: bold; display: none; }
         
+        /* Кнопка теперь изначально чистая ссылка */
         .btn-order { background: #25D366; color: #fff; border: none; padding: 12px 25px; font-size: 15px; font-weight: bold; border-radius: 25px; text-decoration: none; display: block; text-align: center; cursor: pointer; -webkit-appearance: none; }
         .btn-order:active { background: #1ebd59; }
     </style>
@@ -170,8 +86,87 @@
             <span class="total-sum"><span id="total-val">0</span> сом</span>
             <span id="delivery-status" class="delivery-note">🎉 Бесплатная доставка!</span>
         </div>
-        <button type="button" onclick="sendOrder()" class="btn-order">Заказать</button>
+        <!-- ИСПРАВЛЕНО: Теперь это тег <a> с обработчиком onmousedown/ontouchstart для мгновенной генерации ссылки -->
+        <a href="#" id="submit-link" onmousedown="prepareLink(this)" ontouchstart="prepareLink(this)" class="btn-order">Заказать</a>
     </div>
 
+    <script>
+        let burgerQty = 0;
+        let shawarmaQty = 0;
+        const burgerPrice = 330;
+        const shawarmaPrice = 400;
+
+        function updateDisplay() {
+            const qtyBurgerEl = document.getElementById('qty-burger');
+            const qtyShawarmaEl = document.getElementById('qty-shawarma');
+            const totalValEl = document.getElementById('total-val');
+            const deliveryStatusEl = document.getElementById('delivery-status');
+
+            if(qtyBurgerEl) qtyBurgerEl.innerText = burgerQty;
+            if(qtyShawarmaEl) qtyShawarmaEl.innerText = shawarmaQty;
+            
+            let total = (burgerQty * burgerPrice) + (shawarmaQty * shawarmaPrice);
+            if(totalValEl) totalValEl.innerText = total;
+
+            if (deliveryStatusEl) {
+                if (total > 1500) {
+                    deliveryStatusEl.style.display = 'block';
+                } else {
+                    deliveryStatusEl.style.display = 'none';
+                }
+            }
+        }
+
+        function changeQty(type, action) {
+            if (type === 'burger') {
+                if (action === 'plus') burgerQty++;
+                if (action === 'minus' && burgerQty > 0) burgerQty--;
+            } else if (type === 'shawarma') {
+                if (action === 'plus') shawarmaQty++;
+                if (action === 'minus' && shawarmaQty > 0) shawarmaQty--;
+            }
+            updateDisplay();
+        }
+
+        // ИСПРАВЛЕНО: Функция формирует ссылку прямо внутри тега <a> в момент касания пальцем или клика мыши
+        function prepareLink(element) {
+            const phoneInput = document.getElementById('client-phone');
+            const addressInput = document.getElementById('client-address');
+            
+            const phone = phoneInput.value.trim();
+            const address = addressInput.value.trim();
+
+            if ((burgerQty + shawarmaQty) === 0) {
+                alert("Пожалуйста, добавьте хотя бы одно блюдо в заказ.");
+                element.href = "#";
+                return false;
+            }
+
+            if (!phone || !address) {
+                alert("Пожалуйста, введите ваш номер телефона и адрес доставки.");
+                element.href = "#";
+                return false;
+            }
+
+            let total = (burgerQty * burgerPrice) + (shawarmaQty * shawarmaPrice);
+
+            let text = "*Новый заказ из Papa Martin* 📋\n\n";
+            if (burgerQty > 0) text += `▪️ Бургер Говядина x ${burgerQty} шт. (${burgerQty * burgerPrice} сом)\n`;
+            if (shawarmaQty > 0) text += `▪️ Шаурма Куриная x ${shawarmaQty} шт. (${shawarmaQty * shawarmaPrice} сом)\n`;
+            
+            text += `\n*Итоговая сумма:* ${total} сом\n`;
+            if (total > 1500) {
+                text += `🚚 *Доставка:* Бесплатная\n\n`;
+            } else {
+                text += `🚚 *Доставка:* По тарифу\n\n`;
+            }
+            
+            text += `👤 *Контакты:* ${phone}\n`;
+            text += `📍 *Адрес доставки:* ${address}`;
+
+            // Записываем готовую ссылку прямо в атрибут href элемента
+            element.href = "https://wa.me" + encodeURIComponent(text);
+        }
+    </script>
 </body>
 </html>
