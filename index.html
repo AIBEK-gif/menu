@@ -6,7 +6,7 @@
     <title>Papa Martin</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif; }
-        body { background: #f9f9f9; padding: 15px; padding-bottom: 120px; color: #2c3e50; }
+        body { background: #f9f9f9; padding: 15px; padding-bottom: 140px; color: #2c3e50; }
         .header { text-align: center; padding: 20px 0; background: #fff; margin-bottom: 15px; border-radius: 8px; }
         .menu-item { background: #fff; padding: 15px; margin-bottom: 10px; border-radius: 8px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
         .item-info { flex-grow: 1; }
@@ -19,14 +19,16 @@
         .form-section h3 { margin-bottom: 10px; font-size: 16px; }
         .input-group { margin-bottom: 10px; }
         .input-group label { display: block; font-size: 12px; color: #7f8c8d; margin-bottom: 4px; }
-        .input-group input, .input-group textarea { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; outline: none; }
+        .input-group input, .input-group textarea { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; outline: none; background: #fff; }
         
-        .fixed-bottom { position: fixed; bottom: 0; left: 0; right: 0; background: #fff; padding: 15px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 -3px 10px rgba(0,0,0,0.1); z-index: 10000; }
+        /* ИСПРАВЛЕНО: Полностью переработана панель, чтобы она физически не блокировала клики */
+        .fixed-bottom { position: fixed; bottom: 0; left: 0; right: 0; background: #fff; padding: 15px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 -3px 10px rgba(0,0,0,0.1); z-index: 999999; pointer-events: auto; }
         .total-box { display: flex; flex-direction: column; }
         .total-sum { font-size: 20px; font-weight: bold; }
         .delivery-note { font-size: 11px; color: #27ae60; margin-top: 2px; font-weight: bold; display: none; }
         
-        .btn-order { background: #25D366; color: #fff; border: none; padding: 12px 25px; font-size: 15px; font-weight: bold; border-radius: 25px; text-decoration: none; display: inline-block; text-align: center; cursor: pointer; -webkit-appearance: none; }
+        .btn-order { background: #25D366; color: #fff; border: none; padding: 12px 25px; font-size: 15px; font-weight: bold; border-radius: 25px; text-decoration: none; display: inline-block; text-align: center; cursor: pointer; -webkit-appearance: none; position: relative; z-index: 1000000; }
+        .btn-order:active { transform: scale(0.98); }
     </style>
 </head>
 <body>
@@ -36,60 +38,55 @@
         <p>Онлайн-заказ</p>
     </div>
 
-    <!-- ИСПРАВЛЕНО: Всё обёрнуто в тег <form> для гарантированной отправки по нажатию кнопки -->
-    <form id="order-form">
-        <!-- Бургер -->
-        <div class="menu-item">
-            <div class="item-info">
-                <div class="item-title">Бургер Говядина</div>
-                <div class="item-price">330 сом</div>
-            </div>
-            <div class="counter">
-                <button type="button" id="minus-burger">-</button>
-                <span id="qty-burger">0</span>
-                <button type="button" id="plus-burger">+</button>
-            </div>
+    <!-- Бургер -->
+    <div class="menu-item">
+        <div class="item-info">
+            <div class="item-title">Бургер Говядина</div>
+            <div class="item-price">330 сом</div>
         </div>
+        <div class="counter">
+            <button type="button" id="minus-burger">-</button>
+            <span id="qty-burger">0</span>
+            <button type="button" id="plus-burger">+</button>
+        </div>
+    </div>
 
-        <!-- Шаурма -->
-        <div class="menu-item">
-            <div class="item-info">
-                <div class="item-title">Шаурма Куриная</div>
-                <div class="item-price">400 сом</div>
-            </div>
-            <div class="counter">
-                <button type="button" id="minus-shawarma">-</button>
-                <span id="qty-shawarma">0</span>
-                <button type="button" id="plus-shawarma">+</button>
-            </div>
+    <!-- Шаурма -->
+    <div class="menu-item">
+        <div class="item-info">
+            <div class="item-title">Шаурма Куриная</div>
+            <div class="item-price">400 сом</div>
         </div>
+        <div class="counter">
+            <button type="button" id="minus-shawarma">-</button>
+            <span id="qty-shawarma">0</span>
+            <button type="button" id="plus-shawarma">+</button>
+        </div>
+    </div>
 
-        <!-- Данные клиента -->
-        <div class="form-section">
-            <h3>Данные для доставки</h3>
-            <div class="input-group">
-                <label>Контактный номер телефона</label>
-                <!-- ИСПРАВЛЕНО: Добавлен атрибут required -->
-                <input type="tel" id="client-phone" placeholder="Введите номер телефона" required>
-            </div>
-            <div class="input-group">
-                <label>Адрес доставки</label>
-                <!-- ИСПРАВЛЕНО: Добавлен атрибут required -->
-                <textarea id="client-address" rows="2" placeholder="Улица, дом, квартира" required></textarea>
-            </div>
+    <!-- Данные клиента -->
+    <div class="form-section">
+        <h3>Данные для доставки</h3>
+        <div class="input-group">
+            <label>Контактный номер телефона</label>
+            <input type="tel" id="client-phone" placeholder="Введите номер телефона">
         </div>
+        <div class="input-group">
+            <label>Адрес доставки</label>
+            <textarea id="client-address" rows="2" placeholder="Улица, дом, квартира"></textarea>
+        </div>
+    </div>
 
-        <!-- Нижняя панель стоимости -->
-        <div class="fixed-bottom">
-            <div class="total-box">
-                <span style="font-size:12px; color:#7f8c8d;">Итого</span>
-                <span class="total-sum"><span id="total-val">0</span> сом</span>
-                <span id="delivery-status" class="delivery-note">🎉 Бесплатная доставка!</span>
-            </div>
-            <!-- ИСПРАВЛЕНО: Кнопка имеет тип submit для запуска отправки формы -->
-            <button type="submit" class="btn-order">Заказать</button>
+    <!-- Нижняя панель стоимости -->
+    <div class="fixed-bottom">
+        <div class="total-box">
+            <span style="font-size:12px; color:#7f8c8d;">Итого</span>
+            <span class="total-sum"><span id="total-val">0</span> сом</span>
+            <span id="delivery-status" class="delivery-note">🎉 Бесплатная доставка!</span>
         </div>
-    </form>
+        <!-- ИСПРАВЛЕНО: Инлайновый вызов функции sendOrder() гарантирует срабатывание клика -->
+        <button type="button" onclick="sendOrder();" class="btn-order">Заказать</button>
+    </div>
 
     <script>
         let burgerQty = 0;
@@ -104,7 +101,6 @@
         const phoneInput = document.getElementById('client-phone');
         const addressInput = document.getElementById('client-address');
         const deliveryStatusEl = document.getElementById('delivery-status');
-        const orderForm = document.getElementById('order-form');
 
         function updateDisplay() {
             qtyBurgerEl.innerText = burgerQty;
@@ -126,16 +122,19 @@
         document.getElementById('plus-shawarma').onclick = function() { shawarmaQty++; updateDisplay(); };
         document.getElementById('minus-shawarma').onclick = function() { if (shawarmaQty > 0) { shawarmaQty--; updateDisplay(); } };
 
-        // ИСПРАВЛЕНО: Обработчик перенесен на событие submit формы, скрипт сработает железно
-        orderForm.onsubmit = function(event) {
-            event.preventDefault();
-
+        // ИСПРАВЛЕНО: Вынесено в глобальную независимую функцию
+        function sendOrder() {
             const phone = phoneInput.value.trim();
             const address = addressInput.value.trim();
 
             if ((burgerQty + shawarmaQty) === 0) {
                 alert("Пожалуйста, добавьте хотя бы одно блюдо в заказ.");
-                return false;
+                return;
+            }
+
+            if (!phone || !address) {
+                alert("Пожалуйста, введите ваш номер телефона и адрес доставки.");
+                return;
             }
 
             let total = (burgerQty * burgerPrice) + (shawarmaQty * shawarmaPrice);
@@ -156,8 +155,9 @@
 
             let whatsappUrl = "https://wa.me" + encodeURIComponent(text);
 
-            window.location.href = whatsappUrl;
-        };
+            // ИСПРАВЛЕНО: Безотказное комбо для перенаправления во встроенных мобильных браузеров
+            window.location.assign(whatsappUrl);
+        }
     </script>
 </body>
 </html>
