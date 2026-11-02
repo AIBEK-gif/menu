@@ -21,12 +21,13 @@
         .input-group label { display: block; font-size: 12px; color: #7f8c8d; margin-bottom: 4px; }
         .input-group input, .input-group textarea { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; outline: none; }
         
-        .fixed-bottom { position: fixed; bottom: 0; left: 0; right: 0; background: #fff; padding: 15px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 -3px 10px rgba(0,0,0,0.1); z-index: 1000; }
+        .fixed-bottom { position: fixed; bottom: 0; left: 0; right: 0; background: #fff; padding: 15px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 -3px 10px rgba(0,0,0,0.1); z-index: 10000; }
         .total-box { display: flex; flex-direction: column; }
         .total-sum { font-size: 20px; font-weight: bold; }
         .delivery-note { font-size: 11px; color: #27ae60; margin-top: 2px; font-weight: bold; display: none; }
         
-        .btn-order { background: #25D366; color: #fff; border: none; padding: 12px 25px; font-size: 15px; font-weight: bold; border-radius: 25px; text-decoration: none; display: inline-block; text-align: center; cursor: pointer; }
+        /* Изменено: Стиль теперь применяется к кнопке и увеличен z-index */
+        .btn-order { background: #25D366; color: #fff; border: none; padding: 12px 25px; font-size: 15px; font-weight: bold; border-radius: 25px; text-decoration: none; display: inline-block; text-align: center; cursor: pointer; -webkit-appearance: none; }
     </style>
 </head>
 <body>
@@ -82,7 +83,8 @@
             <span class="total-sum"><span id="total-val">0</span> сом</span>
             <span id="delivery-status" class="delivery-note">🎉 Бесплатная доставка!</span>
         </div>
-        <a href="#" id="submit-btn" class="btn-order">Заказать</a>
+        <!-- ИСПРАВЛЕНО: заменено на тег button для точного срабатывания клика -->
+        <button type="button" id="submit-btn" class="btn-order">Заказать</button>
     </div>
 
     <script>
@@ -152,10 +154,10 @@
             text += `👤 *Контакты:* ${phone}\n`;
             text += `📍 *Адрес доставки:* ${address}`;
 
-            // ИСПРАВЛЕНО: Добавлен номер телефона и корректный разделитель /?text=
             let whatsappUrl = "https://wa.me" + encodeURIComponent(text);
 
-            window.open(whatsappUrl, '_blank');
+            // ИСПРАВЛЕНО: Прямое перенаправление вместо window.open для обхода блокировок мобильных браузеров
+            window.location.href = whatsappUrl;
         };
     </script>
 </body>
