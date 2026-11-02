@@ -25,7 +25,6 @@
         .total-box { display: flex; flex-direction: column; }
         .total-sum { font-size: 20px; font-weight: bold; }
         
-        /* Кнопка теперь является ссылкой */
         .btn-order { background: #25D366; color: #fff; border: none; padding: 12px 25px; font-size: 15px; font-weight: bold; border-radius: 25px; text-decoration: none; display: inline-block; text-align: center; cursor: pointer; }
         .btn-order.disabled { background: #bdc3c7; pointer-events: none; opacity: 0.6; }
     </style>
@@ -82,8 +81,8 @@
             <span style="font-size:12px; color:#7f8c8d;">Итого</span>
             <span class="total-sum"><span id="total-val">0</span> сом</span>
         </div>
-        <!-- Кнопка "Заказать" -->
-        <a href="#" class="btn-order disabled" id="submit-btn">Заказать</a>
+        <!-- Кнопка "Заказать" теперь имеет цель _self для открытия в этом же окне -->
+        <a href="#" target="_self" class="btn-order disabled" id="submit-btn">Заказать</a>
     </div>
 
     <script>
@@ -105,7 +104,6 @@
             let total = (burgerQty * burgerPrice) + (shawarmaQty * shawarmaPrice);
             totalValEl.innerText = total;
 
-            // Активация и деактивация кнопки через стили ссылки
             if ((burgerQty + shawarmaQty) > 0) {
                 submitBtnEl.classList.remove('disabled');
             } else {
@@ -135,13 +133,12 @@
             }
         };
 
-        // Формирование ссылки прямо в момент нажатия на кнопку
         submitBtnEl.onclick = function(event) {
             const phone = document.getElementById('client-phone').value.trim();
             const address = document.getElementById('client-address').value.trim();
 
             if (!phone || !address) {
-                event.preventDefault(); // Запрещаем переход
+                event.preventDefault();
                 alert("Пожалуйста, введите телефон и адрес доставки.");
                 return false;
             }
@@ -155,7 +152,7 @@
             text += `👤 *Контакты:* ${phone}\n`;
             text += `📍 *Адрес доставки:* ${address}`;
 
-            // Присваиваем готовый адрес прямо в ссылку кнопки
+            // Заменяем ссылку на прямое перенаправление без всплывающих окон
             submitBtnEl.href = "https://whatsapp.com" + encodeURIComponent(text);
         };
     </script>
