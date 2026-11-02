@@ -23,7 +23,7 @@
         body {
             background-color: var(--light-color);
             color: var(--dark-color);
-            padding-bottom: 100px;
+            padding-bottom: 110px;
         }
 
         .header {
@@ -64,7 +64,7 @@
         .item-img {
             width: 80px;
             height: 80px;
-            background-color: #eee;
+            background-color: #f1f2f6;
             border-radius: 8px;
             margin-right: 15px;
             display: flex;
@@ -95,28 +95,36 @@
             align-items: center;
             background: #f1f2f6;
             border-radius: 20px;
-            padding: 2px;
+            padding: 4px;
         }
 
         .counter button {
-            width: 32px;
-            height: 32px;
+            width: 36px;
+            height: 36px;
             border: none;
             background: #fff;
             border-radius: 50%;
-            font-size: 18px;
+            font-size: 20px;
             font-weight: bold;
             cursor: pointer;
             color: var(--dark-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
             box-shadow: 0 1px 3px rgba(0,0,0,0.1);
         }
 
+        .counter button:active {
+            background: #e1e2e6;
+        }
+
         .counter span {
-            margin: 0 12px;
+            margin: 0 14px;
             font-size: 16px;
             font-weight: 600;
-            min-width: 15px;
+            min-width: 20px;
             text-align: center;
+            display: inline-block;
         }
 
         .form-section {
@@ -146,7 +154,6 @@
         }
 
         .input-group input, .input-group textarea {
-            width: 100px;
             width: 100%;
             padding: 12px;
             border: 1px solid var(--border-color);
@@ -207,16 +214,15 @@
             font-weight: bold;
             border-radius: 25px;
             cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 8px;
             box-shadow: 0 4px 6px rgba(37, 211, 102, 0.25);
+            transition: opacity 0.2s;
         }
 
         .btn-order:disabled {
             background-color: #bdc3c7;
             box-shadow: none;
             cursor: not-allowed;
+            opacity: 0.6;
         }
     </style>
 </head>
@@ -236,9 +242,9 @@
                 <div class="item-price">330 сом</div>
             </div>
             <div class="counter">
-                <button onclick="changeQty('burger', -1)">-</button>
+                <button type="button" onclick="changeQty('burger', -1)">-</button>
                 <span id="qty-burger">0</span>
-                <button onclick="changeQty('burger', 1)">+</button>
+                <button type="button" onclick="changeQty('burger', 1)">+</button>
             </div>
         </div>
 
@@ -250,9 +256,9 @@
                 <div class="item-price">400 сом</div>
             </div>
             <div class="counter">
-                <button onclick="changeQty('shawarma', -1)">-</button>
+                <button type="button" onclick="changeQty('shawarma', -1)">-</button>
                 <span id="qty-shawarma">0</span>
-                <button onclick="changeQty('shawarma', 1)">+</button>
+                <button type="button" onclick="changeQty('shawarma', 1)">+</button>
             </div>
         </div>
 
@@ -261,7 +267,7 @@
             <h3>Данные для доставки</h3>
             <div class="input-group">
                 <label for="client-phone">Контактный номер телефона</label>
-                <input type="tel" id="client-phone" placeholder="+996 (___) __-__-__">
+                <input type="tel" id="client-phone" placeholder="+996 (773) 08-81-76">
             </div>
             <div class="input-group">
                 <label for="client-address">Адрес доставки</label>
@@ -270,68 +276,64 @@
         </div>
     </div>
 
-    <!-- Фиксированная нижняя панель с калькулятором -->
+    <!-- Фиксированная нижняя панель -->
     <div class="fixed-bottom">
         <div class="total-price-box">
             <span class="total-label">Общая стоимость</span>
             <span class="total-sum"><span id="total-val">0</span> сом</span>
         </div>
-        <button class="btn-order" id="submit-btn" onclick="sendOrder()" disabled>
+        <button type="button" class="btn-order" id="submit-btn" onclick="sendOrder()" disabled>
             Заказать
         </button>
     </div>
 
     <script>
+        // Базовые данные товаров
         const menu = {
             burger: { name: "Бургер Говядина", price: 330, qty: 0 },
             shawarma: { name: "Шаурма Куриная", price: 400, qty: 0 }
         };
 
+        // Функция изменения количества (+ и -)
         function changeQty(item, change) {
+            // Запрещаем количество меньше 0
             menu[item].qty = Math.max(0, menu[item].qty + change);
+            
+            // Выводим обновленное количество на экран
             document.getElementById(`qty-${item}`).innerText = menu[item].qty;
+            
+            // Пересчитываем всю корзину
             calculateTotal();
         }
 
+        // Калькулятор общей стоимости
         function calculateTotal() {
             let total = 0;
             let totalItems = 0;
+            
             for (let key in menu) {
                 total += menu[key].qty * menu[key].price;
                 totalItems += menu[key].qty;
             }
+            
+            // Выводим общую сумму на плашку внизу
             document.getElementById('total-val').innerText = total;
             
-            // Кнопка активна только если выбран хотя бы 1 товар
+            // Делаем кнопку «Заказать» активной только если количество блюд больше 0
             document.getElementById('submit-btn').disabled = totalItems === 0;
         }
 
+        // Логика формирования и отправки данных
         function sendOrder() {
             const phone = document.getElementById('client-phone').value.trim();
             const address = document.getElementById('client-address').value.trim();
 
             if (!phone || !address) {
-                alert("Пожалуйста, заполните номер телефона и адрес доставки.");
+                alert("Пожалуйста, заполните номер телефона и адрес доставки перед отправкой.");
                 return;
             }
 
-            // Формируем красивый текст заказа
+            // Автоматическое форматирование текста сообщения для WhatsApp
             let orderText = `*Новый заказ из Papa Mardin* 📋\n\n`;
             let totalSum = 0;
 
-            for (let key in menu) {
-                if (menu[key].qty > 0) {
-                    let cost = menu[key].qty * menu[key].price;
-                    orderText += `▪️ ${menu[key].name} x ${menu[key].qty} шт. (${cost} сом)\n`;
-                    totalSum += cost;
-                }
-            }
-
-            orderText += `\n*Итоговая сумма:* ${totalSum} сом\n\n`;
-            orderText += `👤 *Контакты:* ${phone}\n`;
-            orderText += `📍 *Адрес доставки:* ${address}`;
-
-            // ЦЕЛЕВОЙ НОМЕР WHATSAPP ИЗ ВАШИХ ЗАПИСЕЙ
-            const targetWhatsAppNumber = "9967730881764"; 
-
-            // ЛОГИКА ДЛЯ АНТИБЛОКИРОВКИ (ОТПРАВКА НА ВАШ БЭКЕНД ИЛИ API)
