@@ -25,7 +25,7 @@
         .total-box { display: flex; flex-direction: column; }
         .total-sum { font-size: 20px; font-weight: bold; }
         
-        .btn-order { background: #25D366; color: #fff; border: none; padding: 12px 25px; font-size: 15px; font-weight: bold; border-radius: 25px; text-align: center; cursor: pointer; }
+        .btn-order { background: #25D366; color: #fff; border: none; padding: 12px 25px; font-size: 15px; font-weight: bold; border-radius: 25px; text-align: center; cursor: pointer; width: auto; }
         .btn-order:disabled { background: #bdc3c7; cursor: not-allowed; opacity: 0.6; }
     </style>
 </head>
@@ -98,7 +98,6 @@
         const phoneInput = document.getElementById('client-phone');
         const addressInput = document.getElementById('client-address');
 
-        // Обычное обновление цифр на экране
         function updateCartDisplay() {
             qtyBurgerEl.innerText = burgerQty;
             qtyShawarmaEl.innerText = shawarmaQty;
@@ -106,17 +105,39 @@
             let total = (burgerQty * burgerPrice) + (shawarmaQty * shawarmaPrice);
             totalValEl.innerText = total;
 
-            // Кнопка активна, если выбран хотя бы один товар
-            submitBtnEl.disabled = (burgerQty + shawarmaQty) === 0;
+            // Кнопка становится активной, если количество блюд больше нуля
+            if ((burgerQty + shawarmaQty) > 0) {
+                submitBtnEl.disabled = false;
+            } else {
+                submitBtnEl.disabled = true;
+            }
         }
 
-        document.getElementById('plus-burger').onclick = function() { burgerQty++; updateCartDisplay(); };
-        document.getElementById('minus-burger').onclick = function() { if (burgerQty > 0) { burgerQty--; updateCartDisplay(); } };
-        document.getElementById('plus-shawarma').onclick = function() { shawarmaQty++; updateCartAndLink(); };
-        document.getElementById('plus-shawarma').onclick = function() { shawarmaQty++; updateCartDisplay(); };
-        document.getElementById('minus-shawarma').onclick = function() { if (shawarmaQty > 0) { shawarmaQty--; updateCartDisplay(); } };
+        // Нажатия на кнопки калькулятора бургера
+        document.getElementById('plus-burger').onclick = function() {
+            burgerQty++;
+            updateCartDisplay();
+        };
+        document.getElementById('minus-burger').onclick = function() {
+            if (burgerQty > 0) {
+                burgerQty--;
+                updateCartDisplay();
+            }
+        };
 
-        // Логика клика на кнопку «Заказать» (срабатывает мгновенно при нажатии)
+        // Нажатия на кнопки калькулятора шаурмы
+        document.getElementById('plus-shawarma').onclick = function() {
+            shawarmaQty++;
+            updateCartDisplay();
+        };
+        document.getElementById('minus-shawarma').onclick = function() {
+            if (shawarmaQty > 0) {
+                shawarmaQty--;
+                updateCartDisplay();
+            }
+        };
+
+        // Логика клика на кнопку «Заказать»
         submitBtnEl.onclick = function() {
             const phone = phoneInput.value.trim();
             const address = addressInput.value.trim();
@@ -135,11 +156,8 @@
             text += `👤 *Контакты:* ${phone}\n`;
             text += `📍 *Адрес доставки:* ${address}`;
 
-            // Самая надежная прямая ссылка открытия чата
-            let targetUrl = "https://whatsapp.com" + encodeURIComponent(text);
-            
-            // Перенаправляем пользователя в этом же окне без всплывающих вкладок
-            window.location.href = targetUrl;
+            // Прямой переход по ссылке в текущем окне браузера
+            window.location.href = "https://whatsapp.com" + encodeURIComponent(text);
         };
     </script>
 </body>
