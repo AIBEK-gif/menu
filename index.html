@@ -81,8 +81,8 @@
             <span style="font-size:12px; color:#7f8c8d;">Итого</span>
             <span class="total-sum"><span id="total-val">0</span> сом</span>
         </div>
-        <!-- Простая прямая ссылка-кнопка без JS-кликов -->
-        <a href="https://wa.me" class="btn-order disabled" id="submit-btn">Заказать</a>
+        <!-- Кнопка заказа -->
+        <a href="#" class="btn-order disabled" id="submit-btn">Заказать</a>
     </div>
 
     <script>
@@ -99,7 +99,6 @@
         const phoneInput = document.getElementById('client-phone');
         const addressInput = document.getElementById('client-address');
 
-        // Функция, которая собирает ссылку в фоновом режиме при любом изменении
         function updateCartAndLink() {
             qtyBurgerEl.innerText = burgerQty;
             qtyShawarmaEl.innerText = shawarmaQty;
@@ -110,14 +109,12 @@
             const phone = phoneInput.value.trim();
             const address = addressInput.value.trim();
 
-            // Кнопка активна только если выбран товар И заполнены поля телефона/адреса
             if ((burgerQty + shawarmaQty) > 0 && phone !== "" && address !== "") {
                 submitBtnEl.classList.remove('disabled');
             } else {
                 submitBtnEl.classList.add('disabled');
             }
 
-            // Заранее формируем текст и зашиваем в кнопку
             let text = "*Новый заказ из Papa Mardin* 📋\n\n";
             if (burgerQty > 0) text += `▪️ Бургер Говядина x ${burgerQty} шт. (${burgerQty * burgerPrice} сом)\n`;
             if (shawarmaQty > 0) text += `▪️ Шаурма Куриная x ${shawarmaQty} шт. (${shawarmaQty * shawarmaPrice} сом)\n`;
@@ -125,17 +122,23 @@
             text += `👤 *Контакты:* ${phone}\n`;
             text += `📍 *Адрес доставки:* ${address}`;
 
-            // Используем максимально надежный формат коротких ссылок wa.me
-            submitBtnEl.href = "https://wa.me?text=" + encodeURIComponent(text);
+            // Проверяем, открыт ли сайт на компьютере или на мобильном
+            const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+            
+            if (isMobile) {
+                // Ссылка для смартфонов (сразу открывает приложение на нужном номере)
+                submitBtnEl.href = "https://wa.me" + encodeURIComponent(text);
+            } else {
+                // Ссылка для компьютеров (принудительно открывает диалог с этим номером в WhatsApp Web)
+                submitBtnEl.href = "https://whatsapp.com" + encodeURIComponent(text);
+            }
         }
 
-        // Следим за кнопками калькулятора
         document.getElementById('plus-burger').onclick = function() { burgerQty++; updateCartAndLink(); };
         document.getElementById('minus-burger').onclick = function() { if (burgerQty > 0) { burgerQty--; updateCartAndLink(); } };
         document.getElementById('plus-shawarma').onclick = function() { shawarmaQty++; updateCartAndLink(); };
         document.getElementById('minus-shawarma').onclick = function() { if (shawarmaQty > 0) { shawarmaQty--; updateCartAndLink(); } };
 
-        // Следим за тем, что пользователь пишет в поля ввода текста
         phoneInput.oninput = function() { updateCartAndLink(); };
         addressInput.oninput = function() { updateCartAndLink(); };
     </script>
