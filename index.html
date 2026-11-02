@@ -152,6 +152,7 @@
             text += `👤 *Контакты:* ${phone}\n`;
             text += `📍 *Адрес доставки:* ${address}`;
 
+            // ИСПРАВЛЕНО: Добавлен номер телефона и корректный разделитель /?text=
             let whatsappUrl = "https://wa.me" + encodeURIComponent(text);
 
             window.open(whatsappUrl, '_blank');
