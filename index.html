@@ -68,12 +68,10 @@
         <h3>Данные для доставки</h3>
         <div class="input-group">
             <label>Контактный номер телефона</label>
-            <!-- ИСПРАВЛЕНО: событие oninput мгновенно обновляет ссылку при вводе текста -->
             <input type="tel" id="client-phone" placeholder="Введите номер телефона" oninput="updateWhatsAppLink()">
         </div>
         <div class="input-group">
             <label>Адрес доставки</label>
-            <!-- ИСПРАВЛЕНО: событие oninput мгновенно обновляет ссылку при вводе текста -->
             <textarea id="client-address" rows="2" placeholder="Улица, дом, квартира" oninput="updateWhatsAppLink()"></textarea>
         </div>
     </div>
@@ -85,7 +83,6 @@
             <span class="total-sum"><span id="total-val">0</span> сом</span>
             <span id="delivery-status" class="delivery-note">🎉 Бесплатная доставка!</span>
         </div>
-        <!-- ИСПРАВЛЕНО: Чистая HTML-ссылка с target="_blank" и вызовом валидации перед переходом -->
         <a href="#" id="submit-link" target="_blank" onclick="return validateOrder(event);" class="btn-order">Заказать</a>
     </div>
 
@@ -114,9 +111,12 @@
                     deliveryStatusEl.style.display = 'none';
                 }
             }
-            // Обновляем ссылку каждый раз при изменении количества товаров
             updateWhatsAppLink();
         }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            updateDisplay();
+        });
 
         function changeQty(type, action) {
             if (type === 'burger') {
@@ -129,7 +129,6 @@
             updateDisplay();
         }
 
-        // ИСПРАВЛЕНО: Функция динамически собирает текстовый URL в фоне и прописывает его прямо в тег ссылки 
         function updateWhatsAppLink() {
             const phoneInput = document.getElementById('client-phone');
             const addressInput = document.getElementById('client-address');
@@ -139,7 +138,6 @@
 
             const phone = phoneInput.value.trim();
             const address = addressInput.value.trim();
-
             let total = (burgerQty * burgerPrice) + (shawarmaQty * shawarmaPrice);
 
             let text = "*Новый заказ из Papa Martin* 📋\n\n";
@@ -156,11 +154,9 @@
             text += `👤 *Контакты:* ${phone}\n`;
             text += `📍 *Адрес доставки:* ${address}`;
 
-            // ИСПРАВЛЕНО: Перешли на официальный международный шлюз ://whatsapp.com, который пробивает любые WebView-блокировки
-            submitLink.href = "https://://whatsapp.com/send?phone=996773881764&text=" + encodeURIComponent(text);
+            submitLink.href = "https://whatsapp.com" + encodeURIComponent(text);
         }
 
-        // Проверка заполнения перед переходом
         function validateOrder(event) {
             const phoneInput = document.getElementById('client-phone');
             const addressInput = document.getElementById('client-address');
