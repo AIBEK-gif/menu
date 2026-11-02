@@ -25,8 +25,8 @@
         .total-box { display: flex; flex-direction: column; }
         .total-sum { font-size: 20px; font-weight: bold; }
         
-        .btn-order { background: #25D366; color: #fff; border: none; padding: 12px 25px; font-size: 15px; font-weight: bold; border-radius: 25px; text-decoration: none; display: inline-block; text-align: center; cursor: pointer; }
-        .btn-order.disabled { background: #bdc3c7; pointer-events: none; opacity: 0.6; }
+        .btn-order { background: #25D366; color: #fff; border: none; padding: 12px 25px; font-size: 15px; font-weight: bold; border-radius: 25px; text-align: center; cursor: pointer; }
+        .btn-order:disabled { background: #bdc3c7; cursor: not-allowed; opacity: 0.6; }
     </style>
 </head>
 <body>
@@ -62,7 +62,7 @@
         </div>
     </div>
 
-    <!-- Клиентские данные -->
+    <!-- Данные клиента -->
     <div class="form-section">
         <h3>Данные для доставки</h3>
         <div class="input-group">
@@ -75,14 +75,13 @@
         </div>
     </div>
 
-    <!-- Нижняя панель стоимости -->
+    <!-- Нижняя панель -->
     <div class="fixed-bottom">
         <div class="total-box">
             <span style="font-size:12px; color:#7f8c8d;">Итого</span>
             <span class="total-sum"><span id="total-val">0</span> сом</span>
         </div>
-        <!-- Короткая универсальная базовая ссылка -->
-        <a href="https://whatsapp.com" class="btn-order disabled" id="submit-btn">Заказать</a>
+        <button type="button" class="btn-order" id="submit-btn" disabled>Заказать</button>
     </div>
 
     <script>
@@ -99,24 +98,36 @@
         const phoneInput = document.getElementById('client-phone');
         const addressInput = document.getElementById('client-address');
 
-        function updateCartAndLink() {
+        // Обычное обновление цифр на экране
+        function updateCartDisplay() {
             qtyBurgerEl.innerText = burgerQty;
             qtyShawarmaEl.innerText = shawarmaQty;
 
             let total = (burgerQty * burgerPrice) + (shawarmaQty * shawarmaPrice);
             totalValEl.innerText = total;
 
+            // Кнопка активна, если выбран хотя бы один товар
+            submitBtnEl.disabled = (burgerQty + shawarmaQty) === 0;
+        }
+
+        document.getElementById('plus-burger').onclick = function() { burgerQty++; updateCartDisplay(); };
+        document.getElementById('minus-burger').onclick = function() { if (burgerQty > 0) { burgerQty--; updateCartDisplay(); } };
+        document.getElementById('plus-shawarma').onclick = function() { shawarmaQty++; updateCartAndLink(); };
+        document.getElementById('plus-shawarma').onclick = function() { shawarmaQty++; updateCartDisplay(); };
+        document.getElementById('minus-shawarma').onclick = function() { if (shawarmaQty > 0) { shawarmaQty--; updateCartDisplay(); } };
+
+        // Логика клика на кнопку «Заказать» (срабатывает мгновенно при нажатии)
+        submitBtnEl.onclick = function() {
             const phone = phoneInput.value.trim();
             const address = addressInput.value.trim();
 
-            // Активируем кнопку только при заполнении всех полей
-            if ((burgerQty + shawarmaQty) > 0 && phone !== "" && address !== "") {
-                submitBtnEl.classList.remove('disabled');
-            } else {
-                submitBtnEl.classList.add('disabled');
+            if (!phone || !address) {
+                alert("Пожалуйста, заполните телефон и адрес доставки.");
+                return;
             }
 
-            // Формируем сообщение
+            let total = (burgerQty * burgerPrice) + (shawarmaQty * shawarmaPrice);
+
             let text = "*Новый заказ из Papa Mardin* 📋\n\n";
             if (burgerQty > 0) text += `▪️ Бургер Говядина x ${burgerQty} шт. (${burgerQty * burgerPrice} сом)\n`;
             if (shawarmaQty > 0) text += `▪️ Шаурма Куриная x ${shawarmaQty} шт. (${shawarmaQty * shawarmaPrice} сом)\n`;
@@ -124,17 +135,12 @@
             text += `👤 *Контакты:* ${phone}\n`;
             text += `📍 *Адрес доставки:* ${address}`;
 
-            // Универсальная рабочая ссылка для всех приложений и браузеров
-            submitBtnEl.href = "https://whatsapp.com&text=" + encodeURIComponent(text);
-        }
-
-        document.getElementById('plus-burger').onclick = function() { burgerQty++; updateCartAndLink(); };
-        document.getElementById('minus-burger').onclick = function() { if (burgerQty > 0) { burgerQty--; updateCartAndLink(); } };
-        document.getElementById('plus-shawarma').onclick = function() { shawarmaQty++; updateCartAndLink(); };
-        document.getElementById('minus-shawarma').onclick = function() { if (shawarmaQty > 0) { shawarmaQty--; updateCartAndLink(); } };
-
-        phoneInput.oninput = function() { updateCartAndLink(); };
-        addressInput.oninput = function() { updateCartAndLink(); };
+            // Самая надежная прямая ссылка открытия чата
+            let targetUrl = "https://whatsapp.com" + encodeURIComponent(text);
+            
+            // Перенаправляем пользователя в этом же окне без всплывающих вкладок
+            window.location.href = targetUrl;
+        };
     </script>
 </body>
 </html>
