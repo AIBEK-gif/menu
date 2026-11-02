@@ -83,20 +83,17 @@
     </div>
 
     <script>
-        // Переменные количества
         let burgerQty = 0;
         let shawarmaQty = 0;
 
         const burgerPrice = 330;
         const shawarmaPrice = 400;
 
-        // Элементы страницы
         const qtyBurgerEl = document.getElementById('qty-burger');
         const qtyShawarmaEl = document.getElementById('qty-shawarma');
         const totalValEl = document.getElementById('total-val');
         const submitBtnEl = document.getElementById('submit-btn');
 
-        // Функция пересчета итогов
         function updateCart() {
             qtyBurgerEl.innerText = burgerQty;
             qtyShawarmaEl.innerText = shawarmaQty;
@@ -104,7 +101,6 @@
             let total = (burgerQty * burgerPrice) + (shawarmaQty * shawarmaPrice);
             totalValEl.innerText = total;
 
-            // Кнопка активна только если выбран хотя бы 1 товар
             if ((burgerQty + shawarmaQty) > 0) {
                 submitBtnEl.disabled = false;
             } else {
@@ -112,7 +108,6 @@
             }
         }
 
-        // Прямое назначение кликов для Бургера
         document.getElementById('plus-burger').onclick = function() {
             burgerQty++;
             updateCart();
@@ -124,7 +119,6 @@
             }
         };
 
-        // Прямое назначение кликов для Шаурмы
         document.getElementById('plus-shawarma').onclick = function() {
             shawarmaQty++;
             updateCart();
@@ -136,7 +130,6 @@
             }
         };
 
-        // Клик по кнопке Заказать
         submitBtnEl.onclick = function() {
             const phone = document.getElementById('client-phone').value.trim();
             const address = document.getElementById('client-address').value.trim();
@@ -146,7 +139,8 @@
                 return;
             }
 
-            let text = `*Новый заказ из Papa Mardin* 📋\n\n`;
+            // Формируем чистый текст
+            let text = "*Новый заказ из Papa Mardin* 📋\n\n";
             if (burgerQty > 0) text += `▪️ Бургер Говядина x ${burgerQty} шт. (${burgerQty * burgerPrice} сом)\n`;
             if (shawarmaQty > 0) text += `▪️ Шаурма Куриная x ${shawarmaQty} шт. (${shawarmaQty * shawarmaPrice} сом)\n`;
             
@@ -155,8 +149,10 @@
             text += `👤 *Контакты:* ${phone}\n`;
             text += `📍 *Адрес доставки:* ${address}`;
 
-            const url = `https://whatsapp.com{encodeURIComponent(text)}`;
-            window.open(url, '_blank');
+            // Ссылка исправлена и полностью безопасна
+            let finalUrl = "https://whatsapp.com" + encodeURIComponent(text);
+            
+            window.open(finalUrl, '_blank');
         };
     </script>
 </body>
