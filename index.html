@@ -1,11 +1,9 @@
 <!DOCTYPE html>
-<html lang="ru" class="notranslate" translate="no">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="google" content="notranslate">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Papa Martin</title>
-    
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif; }
         body { background: #f9f9f9; padding: 15px; padding-bottom: 140px; color: #2c3e50; }
@@ -28,7 +26,6 @@
         .total-sum { font-size: 20px; font-weight: bold; }
         .delivery-note { font-size: 11px; color: #27ae60; margin-top: 2px; font-weight: bold; display: none; }
         
-        /* Кнопка теперь изначально чистая ссылка */
         .btn-order { background: #25D366; color: #fff; border: none; padding: 12px 25px; font-size: 15px; font-weight: bold; border-radius: 25px; text-decoration: none; display: block; text-align: center; cursor: pointer; -webkit-appearance: none; }
         .btn-order:active { background: #1ebd59; }
     </style>
@@ -71,11 +68,13 @@
         <h3>Данные для доставки</h3>
         <div class="input-group">
             <label>Контактный номер телефона</label>
-            <input type="tel" id="client-phone" placeholder="Введите номер телефона">
+            <!-- ИСПРАВЛЕНО: событие oninput мгновенно обновляет ссылку при вводе текста -->
+            <input type="tel" id="client-phone" placeholder="Введите номер телефона" oninput="updateWhatsAppLink()">
         </div>
         <div class="input-group">
             <label>Адрес доставки</label>
-            <textarea id="client-address" rows="2" placeholder="Улица, дом, квартира"></textarea>
+            <!-- ИСПРАВЛЕНО: событие oninput мгновенно обновляет ссылку при вводе текста -->
+            <textarea id="client-address" rows="2" placeholder="Улица, дом, квартира" oninput="updateWhatsAppLink()"></textarea>
         </div>
     </div>
 
@@ -86,8 +85,8 @@
             <span class="total-sum"><span id="total-val">0</span> сом</span>
             <span id="delivery-status" class="delivery-note">🎉 Бесплатная доставка!</span>
         </div>
-        <!-- ИСПРАВЛЕНО: Теперь это тег <a> с обработчиком onmousedown/ontouchstart для мгновенной генерации ссылки -->
-        <a href="#" id="submit-link" onmousedown="prepareLink(this)" ontouchstart="prepareLink(this)" class="btn-order">Заказать</a>
+        <!-- ИСПРАВЛЕНО: Чистая HTML-ссылка с target="_blank" и вызовом валидации перед переходом -->
+        <a href="#" id="submit-link" target="_blank" onclick="return validateOrder(event);" class="btn-order">Заказать</a>
     </div>
 
     <script>
@@ -115,6 +114,8 @@
                     deliveryStatusEl.style.display = 'none';
                 }
             }
+            // Обновляем ссылку каждый раз при изменении количества товаров
+            updateWhatsAppLink();
         }
 
         function changeQty(type, action) {
@@ -128,25 +129,16 @@
             updateDisplay();
         }
 
-        // ИСПРАВЛЕНО: Функция формирует ссылку прямо внутри тега <a> в момент касания пальцем или клика мыши
-        function prepareLink(element) {
+        // ИСПРАВЛЕНО: Функция динамически собирает текстовый URL в фоне и прописывает его прямо в тег ссылки 
+        function updateWhatsAppLink() {
             const phoneInput = document.getElementById('client-phone');
             const addressInput = document.getElementById('client-address');
+            const submitLink = document.getElementById('submit-link');
             
+            if (!phoneInput || !addressInput || !submitLink) return;
+
             const phone = phoneInput.value.trim();
             const address = addressInput.value.trim();
-
-            if ((burgerQty + shawarmaQty) === 0) {
-                alert("Пожалуйста, добавьте хотя бы одно блюдо в заказ.");
-                element.href = "#";
-                return false;
-            }
-
-            if (!phone || !address) {
-                alert("Пожалуйста, введите ваш номер телефона и адрес доставки.");
-                element.href = "#";
-                return false;
-            }
 
             let total = (burgerQty * burgerPrice) + (shawarmaQty * shawarmaPrice);
 
@@ -164,8 +156,31 @@
             text += `👤 *Контакты:* ${phone}\n`;
             text += `📍 *Адрес доставки:* ${address}`;
 
-            // Записываем готовую ссылку прямо в атрибут href элемента
-            element.href = "https://wa.me" + encodeURIComponent(text);
+            // ИСПРАВЛЕНО: Перешли на официальный международный шлюз ://whatsapp.com, который пробивает любые WebView-блокировки
+            submitLink.href = "https://://whatsapp.com/send?phone=996773881764&text=" + encodeURIComponent(text);
+        }
+
+        // Проверка заполнения перед переходом
+        function validateOrder(event) {
+            const phoneInput = document.getElementById('client-phone');
+            const addressInput = document.getElementById('client-address');
+            
+            const phone = phoneInput.value.trim();
+            const address = addressInput.value.trim();
+
+            if ((burgerQty + shawarmaQty) === 0) {
+                alert("Пожалуйста, добавьте хотя бы одно блюдо в заказ.");
+                event.preventDefault();
+                return false;
+            }
+
+            if (!phone || !address) {
+                alert("Пожалуйста, введите ваш номер телефона и адрес доставки.");
+                event.preventDefault();
+                return false;
+            }
+
+            return true;
         }
     </script>
 </body>
