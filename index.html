@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Papa Mardin</title>
+    <title>Papa Martin</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif; }
         body { background: #f9f9f9; padding: 15px; padding-bottom: 120px; color: #2c3e50; }
@@ -24,15 +24,15 @@
         .fixed-bottom { position: fixed; bottom: 0; left: 0; right: 0; background: #fff; padding: 15px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 -3px 10px rgba(0,0,0,0.1); z-index: 1000; }
         .total-box { display: flex; flex-direction: column; }
         .total-sum { font-size: 20px; font-weight: bold; }
+        .delivery-note { font-size: 11px; color: #27ae60; margin-top: 2px; font-weight: bold; display: none; }
         
-        /* Кнопка всегда активна и выглядит как яркая зеленая плашка */
         .btn-order { background: #25D366; color: #fff; border: none; padding: 12px 25px; font-size: 15px; font-weight: bold; border-radius: 25px; text-decoration: none; display: inline-block; text-align: center; cursor: pointer; }
     </style>
 </head>
 <body>
 
     <div class="header">
-        <h1>Papa Mardin</h1>
+        <h1>Papa Martin</h1>
         <p>Онлайн-заказ</p>
     </div>
 
@@ -80,8 +80,8 @@
         <div class="total-box">
             <span style="font-size:12px; color:#7f8c8d;">Итого</span>
             <span class="total-sum"><span id="total-val">0</span> сом</span>
+            <span id="delivery-status" class="delivery-note">🎉 Бесплатная доставка!</span>
         </div>
-        <!-- Прямая и надежная кнопка-ссылка -->
         <a href="#" id="submit-btn" class="btn-order">Заказать</a>
     </div>
 
@@ -98,13 +98,20 @@
         const submitBtnEl = document.getElementById('submit-btn');
         const phoneInput = document.getElementById('client-phone');
         const addressInput = document.getElementById('client-address');
+        const deliveryStatusEl = document.getElementById('delivery-status');
 
-        // Обычный живой подсчет суммы на экране при нажатии на + или -
         function updateDisplay() {
             qtyBurgerEl.innerText = burgerQty;
             qtyShawarmaEl.innerText = shawarmaQty;
             let total = (burgerQty * burgerPrice) + (shawarmaQty * shawarmaPrice);
             totalValEl.innerText = total;
+
+            // Показываем плашку бесплатной доставки при заказе от 1500 сом
+            if (total > 1500) {
+                deliveryStatusEl.style.display = 'block';
+            } else {
+                deliveryStatusEl.style.display = 'none';
+            }
         }
 
         document.getElementById('plus-burger').onclick = function() { burgerQty++; updateDisplay(); };
@@ -112,19 +119,16 @@
         document.getElementById('plus-shawarma').onclick = function() { shawarmaQty++; updateDisplay(); };
         document.getElementById('minus-shawarma').onclick = function() { if (shawarmaQty > 0) { shawarmaQty--; updateDisplay(); } };
 
-        // Сборка сообщения происходит СТРОГО в момент нажатия на кнопку "Заказать"
         submitBtnEl.onclick = function(event) {
             const phone = phoneInput.value.trim();
             const address = addressInput.value.trim();
 
-            // Проверка на пустую корзину
             if ((burgerQty + shawarmaQty) === 0) {
                 event.preventDefault();
-                alert("Пожалуйста, добавьте хотя бы одно блюдо в заказ с помощью кнопок «+».");
+                alert("Пожалуйста, добавьте хотя бы одно блюдо в заказ.");
                 return false;
             }
 
-            // Проверка на пустые поля формы
             if (!phone || !address) {
                 event.preventDefault();
                 alert("Пожалуйста, введите ваш номер телефона и адрес доставки.");
@@ -133,15 +137,21 @@
 
             let total = (burgerQty * burgerPrice) + (shawarmaQty * shawarmaPrice);
 
-            // Текст заказа
-            let text = "*Новый заказ из Papa Mardin* 📋\n\n";
+            let text = "*Новый заказ из Papa Martin* 📋\n\n";
             if (burgerQty > 0) text += `▪️ Бургер Говядина x ${burgerQty} шт. (${burgerQty * burgerPrice} сом)\n`;
             if (shawarmaQty > 0) text += `▪️ Шаурма Куриная x ${shawarmaQty} шт. (${shawarmaQty * shawarmaPrice} сом)\n`;
-            text += `\n*Итоговая сумма:* ${total} сом\n\n`;
+            
+            text += `\n*Итоговая сумма:* ${total} сом\n`;
+            if (total > 1500) {
+                text += `🚚 *Доставка:* Бесплатная\n\n`;
+            } else {
+                text += `🚚 *Доставка:* По тарифу\n\n`;
+            }
+            
             text += `👤 *Контакты:* ${phone}\n`;
             text += `📍 *Адрес доставки:* ${address}`;
 
-            // Зашиваем текст в ссылку и разрешаем переход в этом же окне без всплывающих окон
+            // Правильный формат отправки в WhatsApp на нужный номер телефона
             submitBtnEl.href = "https://whatsapp.com" + encodeURIComponent(text);
         };
     </script>
